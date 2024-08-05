@@ -10,7 +10,7 @@ class Attachment extends Model
     use HasFactory;
     protected $fillable = ['file_path'];
 
-    public function attachable()
+    public function attachable() // this method defines that Attachement can belong to any model 
     {
         return $this->morphTo();
     }

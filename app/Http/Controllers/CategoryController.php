@@ -4,43 +4,56 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Resources\CategoryResource; 
 
 class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::all();
-        return response()->json($categories);
+        $categories = Category::with('attachments')->get();
+        // return response()->json($categories);
+        return CategoryResource::collection($categories);
+
     }
 
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
+            'attachments.*.file' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+            return response()->json($validator->errors(), 422); // invalid data
         }
 
         $category = Category::create([
             'title' => $request->input('title'),
         ]);
 
+        if ($request->hasFile('attachments')) { 
+            foreach ($request->file('attachments') as $file) {
+                $filePath = $file->store('attachments', 'public');
+                $category->attachments()->create([
+                    'file_path' => $filePath,
+                ]);
+            }
+        }
+
         return response()->json($category, 201);
     }
 
     public function show($id)
     {
-        $category = Category::find($id);
+        $category = Category::with('attachments')->find($id);
 
         if (!$category) {
             return response()->json(['message' => 'Category not found'], 404);
         }
 
-        return response()->json($category);
+        return new CategoryResource($category); 
     }
 
     public function update(Request $request, $id)
@@ -53,6 +66,7 @@ class CategoryController extends Controller
 
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
+            'attachments.*.file' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
         ]);
 
         if ($validator->fails()) {
@@ -62,6 +76,20 @@ class CategoryController extends Controller
         $category->update([
             'title' => $request->input('title'),
         ]);
+
+        if ($request->hasFile('attachments')) {
+            $category->attachments()->each(function ($attachment) {
+                Storage::disk('public')->delete($attachment->file_path);
+                $attachment->delete();
+            });
+
+            foreach ($request->file('attachments') as $file) {
+                $filePath = $file->store('attachments', 'public');
+                $category->attachments()->create([
+                    'file_path' => $filePath,
+                ]);
+            }
+        }
 
         return response()->json($category);
     }
@@ -74,8 +102,12 @@ class CategoryController extends Controller
             return response()->json(['message' => 'Category not found'], 404);
         }
 
-        $category->delete();
+        $category->attachments()->each(function ($attachment) {
+            Storage::disk('public')->delete($attachment->file_path);
+            $attachment->delete();
+        });
 
+        $category->delete();
         return response()->json(['message' => 'Category deleted successfully']);
     }
 }
