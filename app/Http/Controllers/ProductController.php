@@ -46,8 +46,11 @@ class ProductController extends Controller
             }
         }
 
-        return response()->json(new ProductResource($product), 201);
+        return response()->json(new ProductResource($product), 201); 
     }
+
+
+
 
     public function show($id)
     {
@@ -60,6 +63,9 @@ class ProductController extends Controller
         return new ProductResource($product);
     }
 
+
+
+
     public function update(Request $request, $id)
     {
         $product = Product::find($id);
@@ -68,6 +74,7 @@ class ProductController extends Controller
             return response()->json(['message' => 'Product not found'], 404);
         }
          // note:- Indicates that the field is optional and should only be validated if it's present in the request.
+
         $validator = Validator::make($request->all(), [
             'title' => 'sometimes|string|max:255', //partial updates.
             'description' => 'sometimes|string',
@@ -103,6 +110,8 @@ class ProductController extends Controller
 
         return response()->json(new ProductResource($product));
     }
+
+
 
     public function destroy($id)
     {
