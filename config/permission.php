@@ -31,7 +31,11 @@ return [
     'web',
     'api',
 ],
-
+'defaults' => [
+        'guard' => 'api',
+        'role' => 'api',
+        'permission' => 'api',
+    ],
 
     'table_names' => [
 

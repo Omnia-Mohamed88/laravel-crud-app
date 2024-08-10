@@ -1,5 +1,6 @@
 <?php
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
+use App\Http\Controllers\Controller; // Ensure this line is present
 
 use App\Http\Requests\StorePermissionRequest;
 use Spatie\Permission\Models\Permission;

@@ -1,13 +1,14 @@
 <?php
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\RoleController;
-use App\Http\Controllers\PermissionController;
-use App\Http\Controllers\RolePermissionController;
+use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\RoleController;
+use App\Http\Controllers\Api\PermissionController;
+use App\Http\Controllers\Api\RolePermissionController;
+
 
 // Public routes
 Route::post('register', [AuthController::class, 'register']);
@@ -17,16 +18,20 @@ Route::post('password/email', [AuthController::class, 'sendResetLinkEmail']);
 Route::post('password/reset', [AuthController::class, 'reset']);
 
 // Public GET routes for categories and products
+
 Route::get('categories', [CategoryController::class, 'index']);
+Route::get('categories/{id}', [CategoryController::class, 'show']); // Show category by ID
 Route::get('products', [ProductController::class, 'index']);
+Route::get('products/{id}', [ProductController::class, 'show']); // Show product by ID
+
 
 // Apply middleware to ensure authentication
 Route::middleware('auth:api')->group(function () {
     // Category and Product CRUD routes (accessible by admin and superadmin)
     Route::middleware('role:admin,superadmin')->group(function () {
-        Route::apiResource('categories', CategoryController::class)->except(['index']);
+        Route::apiResource('categories', CategoryController::class)->except(['index' , 'show']);
         Route::post('categories/import', [CategoryController::class, 'import']);
-        Route::apiResource('products', ProductController::class)->except(['index']);
+        Route::apiResource('products', ProductController::class)->except(['index','show']);
     });
 
     // User CRUD routes (only accessible by superadmin)
