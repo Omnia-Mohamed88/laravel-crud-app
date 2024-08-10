@@ -13,7 +13,8 @@ class ProductResource extends JsonResource //formate before responce
             'title' => $this->title,
             'description' => $this->description,
             'price' => $this->price,
-            'category_id' => $this->category_id,
+            // 'category_id' => $this->category_id,
+            'category' => new CategoryResource($this->whenLoaded('category')), // Include category relationship
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'attachments' => $this->attachments->map(function ($attachment) {
