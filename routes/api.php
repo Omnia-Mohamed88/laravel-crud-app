@@ -1,34 +1,58 @@
 <?php
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
-use Illuminate\Support\Facades\Mail;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\RolePermissionController;
 
-
-
-
+// Public routes
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:api');
 Route::post('password/email', [AuthController::class, 'sendResetLinkEmail']);
 Route::post('password/reset', [AuthController::class, 'reset']);
-// API Routes
-Route::apiResource('categories', CategoryController::class);
-Route::apiResource('products', ProductController::class);
-Route::apiResource('users', UserController::class);
 
-Route::get('/send-test-email', function () {
-    \Illuminate\Support\Facades\Mail::raw('This is a test email', function ($message) {
-        $message->to('test@example.com')->subject('Test Email');
+// Public GET routes for categories and products
+Route::get('categories', [CategoryController::class, 'index']);
+Route::get('products', [ProductController::class, 'index']);
+
+// Apply middleware to ensure authentication
+Route::middleware('auth:api')->group(function () {
+    // User CRUD routes (only accessible by superadmin)
+    Route::middleware('role:superadmin')->group(function () {
+        Route::apiResource('users', UserController::class);
+        Route::post('users/{user}/roles', [UserController::class, 'assignRoleToUser']);
+    });
+    
+    // Category CRUD routes (accessible by admin and superadmin)
+    Route::middleware('role:admin,superadmin')->group(function () {
+        Route::apiResource('categories', CategoryController::class)->except(['index']);
     });
 
-    return 'Test email sent!';
+    // Product CRUD routes (accessible by admin and superadmin)
+    Route::middleware('role:admin,superadmin')->group(function () {
+        Route::apiResource('products', ProductController::class)->except(['index']);
+    });
+    
+    // Role routes (accessible by superadmin)
+    Route::middleware('role:superadmin')->group(function () {
+        Route::apiResource('roles', RoleController::class);
+        Route::post('roles/{role}/permissions', [RoleController::class, 'addPermission']);
+        Route::delete('roles/{role}/permissions', [RoleController::class, 'removePermission']);
+    });
+
+    // Permission routes (accessible by superadmin)
+    Route::middleware('role:superadmin')->group(function () {
+        Route::apiResource('permissions', PermissionController::class);
+    });
+
+    // Role-Permission Management (accessible by superadmin)
+    Route::middleware('role:superadmin')->group(function () {
+        Route::post('role-permissions/assign', [RolePermissionController::class, 'assignPermissions']);
+        Route::post('role-permissions/revoke', [RolePermissionController::class, 'revokePermissions']);
+    });
 });
-
-// routes/web.php
-
-

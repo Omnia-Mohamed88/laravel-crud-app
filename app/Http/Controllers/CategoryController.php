@@ -60,30 +60,35 @@ class CategoryController extends Controller
     public function update(Request $request, $id)
     {
         $category = Category::find($id);
-
+    
         if (!$category) {
             return response()->json(['message' => 'Category not found'], 404);
         }
-
+    
+        // Validate the request data
         $validator = Validator::make($request->all(), [
-            'title' => 'required|string|max:255',
-            'attachments.*.file' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'title' => 'sometimes|string|max:255',
+            'attachments.*' => 'nullable|file|mimes:jpg,jpeg,png,gif|max:2048',
         ]);
-
+    
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
-
-        $category->update([
-            'title' => $request->input('title'),
-        ]);
-
+    
+        // Update the category title if present
+        if ($request->has('title')) {
+            $category->update(['title' => $request->input('title')]);
+        }
+    
+        // Handle attachments
         if ($request->hasFile('attachments')) {
+            // Delete existing attachments
             $category->attachments()->each(function ($attachment) {
                 Storage::disk('public')->delete($attachment->file_path);
                 $attachment->delete();
             });
-
+    
+            // Store new attachments
             foreach ($request->file('attachments') as $file) {
                 $filePath = $file->store('attachments', 'public');
                 $category->attachments()->create([
@@ -91,9 +96,10 @@ class CategoryController extends Controller
                 ]);
             }
         }
-
+    
         return response()->json($category);
     }
+    
 
     public function destroy($id)
     {

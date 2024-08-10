@@ -5,10 +5,35 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth; // Ensure this is imported
 use App\Http\Resources\UserResource;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class UserController extends Controller
 {
+    public function assignRoleToUser(Request $request, $userId)
+    {
+        // Ensure the user is authenticated and authorized
+        if (!Auth::user()->hasRole('superadmin')) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+    
+        // Validate request data
+        $request->validate([
+            'role' => 'required|string', // Adjust validation if necessary
+        ]);
+    
+        // Find the user by ID
+        $user = User::findOrFail($userId);
+    
+        // Update the role directly
+        $user->role = $request->role;
+        $user->save();
+    
+        return response()->json(['message' => 'Role assigned successfully']);
+    }
+    
     public function index()
     {
         $users = User::all();
@@ -19,7 +44,7 @@ class UserController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users', // unique for each user 
+            'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
         ]);
 
@@ -57,7 +82,7 @@ class UserController extends Controller
 
         $validator = Validator::make($request->all(), [
             'name' => 'sometimes|string|max:255',
-            'email' => 'sometimes|string|email|max:255|unique:users,email,' . $id, // the .$id excluding the current user's email being updated.
+            'email' => 'sometimes|string|email|max:255|unique:users,email,' . $id,
             'password' => 'sometimes|string|min:8',
         ]);
 

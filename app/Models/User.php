@@ -7,10 +7,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens; // Correct
 use Illuminate\Auth\Passwords\CanResetPassword;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, CanResetPassword, Notifiable; 
+    use HasApiTokens, HasFactory, CanResetPassword, HasRoles, Notifiable; 
 
     /**
      * The attributes that are mass assignable.
@@ -42,4 +43,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function hasRole($role)
+    {
+        return $this->role === $role;
+    }
 }
