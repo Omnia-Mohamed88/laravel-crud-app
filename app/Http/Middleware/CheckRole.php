@@ -19,10 +19,15 @@ class CheckRole
         // Split roles by comma
         $roles = explode(',', $roles);
 
-        if (!Auth::check() || !in_array(Auth::user()->role, $roles)) {
-            return response()->json(['error' => 'Forbidden'], 403);
+        // Retrieve the authenticated user's role
+        $userRole = Auth::check() ? Auth::user()->role : null;
+
+        // Allow access if user role is superadmin or matches one of the required roles
+        if ($userRole === 'superadmin' || in_array($userRole, $roles)) {
+            return $next($request);
         }
 
-        return $next($request);
+        // If access is denied
+        return response()->json(['error' => 'Forbidden'], 403);
     }
 }

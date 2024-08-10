@@ -22,22 +22,19 @@ Route::get('products', [ProductController::class, 'index']);
 
 // Apply middleware to ensure authentication
 Route::middleware('auth:api')->group(function () {
+    // Category and Product CRUD routes (accessible by admin and superadmin)
+    Route::middleware('role:admin,superadmin')->group(function () {
+        Route::apiResource('categories', CategoryController::class)->except(['index']);
+        Route::post('categories/import', [CategoryController::class, 'import']);
+        Route::apiResource('products', ProductController::class)->except(['index']);
+    });
+
     // User CRUD routes (only accessible by superadmin)
     Route::middleware('role:superadmin')->group(function () {
         Route::apiResource('users', UserController::class);
         Route::post('users/{user}/roles', [UserController::class, 'assignRoleToUser']);
     });
-    
-    // Category CRUD routes (accessible by admin and superadmin)
-    Route::middleware('role:admin,superadmin')->group(function () {
-        Route::apiResource('categories', CategoryController::class)->except(['index']);
-    });
 
-    // Product CRUD routes (accessible by admin and superadmin)
-    Route::middleware('role:admin,superadmin')->group(function () {
-        Route::apiResource('products', ProductController::class)->except(['index']);
-    });
-    
     // Role routes (accessible by superadmin)
     Route::middleware('role:superadmin')->group(function () {
         Route::apiResource('roles', RoleController::class);

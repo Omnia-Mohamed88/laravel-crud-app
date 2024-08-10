@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\CategoryResource; 
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\CategoriesImport; 
+
 
 class CategoryController extends Controller
 {
@@ -117,4 +120,26 @@ class CategoryController extends Controller
         $category->delete();
         return response()->json(['message' => 'Category deleted successfully']);
     }
+
+    public function import(Request $request)
+{
+    // Validate that a file is provided and it's of the correct type
+    $request->validate([
+        'file' => 'required|file|mimes:xlsx,csv|max:2048',
+    ]);
+
+    try {
+        // Import the file using Laravel Excel
+        Excel::import(new CategoriesImport, $request->file('file'));
+        
+        // Log success message
+        \Log::info('File imported successfully');
+        return response()->json(['message' => 'Categories imported successfully'], 201);
+    } catch (\Exception $e) {
+        // Log the error
+        \Log::error('Error importing file: ' . $e->getMessage());
+        return response()->json(['error' => 'Error importing file: ' . $e->getMessage()], 500);
+    }
+}
+
 }
