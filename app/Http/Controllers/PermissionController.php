@@ -1,9 +1,10 @@
 <?php
-
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\StorePermissionRequest;
 use Spatie\Permission\Models\Permission;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class PermissionController extends Controller
 {
@@ -12,32 +13,22 @@ class PermissionController extends Controller
         return response()->json(Permission::all());
     }
 
-    public function store(Request $request)
+    public function store(StorePermissionRequest $request)
     {
         try {
-            // Validate the request
-            $validated = $request->validate([
-                'name' => 'required|string|unique:permissions,name',
-            ]);
-    
-            // Create the permission
-            $permission = Permission::create(['name' => $validated['name']]);
-    
+            // Create the permission using the validated data
+            $permission = Permission::create(['name' => $request->name]);
+
             // Return a success response
             return response()->json([
                 'success' => true,
                 'data' => $permission
             ], 201);
-    
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            // Return a validation error response
-            return response()->json([
-                'success' => false,
-                'message' => 'Validation failed',
-                'errors' => $e->errors()
-            ], 422);
-    
+
         } catch (\Exception $e) {
+            // Log the error
+            Log::error('Error creating permission: ' . $e->getMessage());
+
             // Return a general error response
             return response()->json([
                 'success' => false,
@@ -46,28 +37,54 @@ class PermissionController extends Controller
             ], 500);
         }
     }
-    
 
     public function show(Permission $permission)
     {
         return response()->json($permission);
     }
 
-    public function update(Request $request, Permission $permission)
+    public function update(StorePermissionRequest $request, Permission $permission)
     {
-        $request->validate([
-            'name' => 'required|string|unique:permissions,name,' . $permission->id,
-        ]);
+        try {
+            // Validate the request
+            $validated = $request->validated();
 
-        $permission->update(['name' => $request->name]);
+            // Update the permission with the validated data
+            $permission->update(['name' => $validated['name']]);
 
-        return response()->json($permission);
+            // Return a success response
+            return response()->json($permission);
+
+        } catch (\Exception $e) {
+            // Log the error
+            Log::error('Error updating permission: ' . $e->getMessage());
+
+            // Return a general error response
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     public function destroy(Permission $permission)
     {
-        $permission->delete();
+        try {
+            $permission->delete();
 
-        return response()->json(['message' => 'Permission deleted']);
+            return response()->json(['message' => 'Permission deleted']);
+
+        } catch (\Exception $e) {
+            // Log the error
+            Log::error('Error deleting permission: ' . $e->getMessage());
+
+            // Return a general error response
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }

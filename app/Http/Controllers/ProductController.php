@@ -1,11 +1,10 @@
 <?php
-
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\UpdateProductRequest;
 use App\Models\Product;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\ProductResource;
 
 class ProductController extends Controller
@@ -16,41 +15,30 @@ class ProductController extends Controller
         return ProductResource::collection($products);
     }
 
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'price' => 'nullable|numeric',
-            'category_id' => 'nullable|exists:categories,id',
-            'attachments.*' => 'nullable|file|mimes:jpg,jpeg,png,gif|max:2048',
-        ]);
+        try {
+            // Create the product using validated data
+            $product = Product::create($request->only(['title', 'description', 'price', 'category_id']));
 
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
-
-        $product = Product::create([
-            'title' => $request->input('title'),
-            'description' => $request->input('description'),
-            'price' => $request->input('price'),
-            'category_id' => $request->input('category_id'),
-        ]);
-
-        if ($request->hasFile('attachments')) {
-            foreach ($request->file('attachments') as $file) {
-                $filePath = $file->store('attachments', 'public');
-                $product->attachments()->create([
-                    'file_path' => $filePath,
-                ]);
+            // Handle file attachments
+            if ($request->hasFile('attachments')) {
+                foreach ($request->file('attachments') as $file) {
+                    $filePath = $file->store('attachments', 'public');
+                    $product->attachments()->create(['file_path' => $filePath]);
+                }
             }
+
+            return response()->json(new ProductResource($product), 201);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred',
+                'error' => $e->getMessage()
+            ], 500);
         }
-
-        return response()->json(new ProductResource($product), 201); 
     }
-
-
-
 
     public function show($id)
     {
@@ -63,70 +51,68 @@ class ProductController extends Controller
         return new ProductResource($product);
     }
 
-
-
-
-    public function update(Request $request, $id)
+    public function update(UpdateProductRequest $request, $id)
     {
-        $product = Product::find($id);
+        try {
+            $product = Product::find($id);
 
-        if (!$product) {
-            return response()->json(['message' => 'Product not found'], 404);
+            if (!$product) {
+                return response()->json(['message' => 'Product not found'], 404);
+            }
+
+            // Update the product with validated data
+            $product->update($request->only(['title', 'description', 'price', 'category_id']));
+
+            // Handle file attachments
+            if ($request->hasFile('attachments')) {
+                // Delete old attachments
+                $product->attachments()->each(function ($attachment) {
+                    Storage::disk('public')->delete($attachment->file_path);
+                    $attachment->delete();
+                });
+
+                // Store new attachments
+                foreach ($request->file('attachments') as $file) {
+                    $filePath = $file->store('attachments', 'public');
+                    $product->attachments()->create(['file_path' => $filePath]);
+                }
+            }
+
+            return response()->json(new ProductResource($product));
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred',
+                'error' => $e->getMessage()
+            ], 500);
         }
-         // note:- Indicates that the field is optional and should only be validated if it's present in the request.
+    }
 
-        $validator = Validator::make($request->all(), [
-            'title' => 'sometimes|string|max:255', //partial updates.
-            'description' => 'sometimes|string',
-            'price' => 'sometimes|numeric',
-            'category_id' => 'sometimes|exists:categories,id',
-            'attachments.*' => 'nullable|file|mimes:jpg,jpeg,png,gif|max:2048', 
-        ]);
+    public function destroy($id)
+    {
+        try {
+            $product = Product::find($id);
 
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
+            if (!$product) {
+                return response()->json(['message' => 'Product not found'], 404);
+            }
 
-        $product->update([
-            'title' => $request->input('title', $product->title),
-            'description' => $request->input('description', $product->description),
-            'price' => $request->input('price', $product->price),
-            'category_id' => $request->input('category_id', $product->category_id),
-        ]);
-
-        if ($request->hasFile('attachments')) {
+            // Delete attachments
             $product->attachments()->each(function ($attachment) {
                 Storage::disk('public')->delete($attachment->file_path);
                 $attachment->delete();
             });
 
-            foreach ($request->file('attachments') as $file) {
-                $filePath = $file->store('attachments', 'public');
-                $product->attachments()->create([
-                    'file_path' => $filePath,
-                ]);
-            }
+            $product->delete();
+            return response()->json(['message' => 'Product deleted successfully']);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred',
+                'error' => $e->getMessage()
+            ], 500);
         }
-
-        return response()->json(new ProductResource($product));
-    }
-
-
-
-    public function destroy($id)
-    {
-        $product = Product::find($id);
-
-        if (!$product) {
-            return response()->json(['message' => 'Product not found'], 404);
-        }
-
-        $product->attachments()->each(function ($attachment) {
-            Storage::disk('public')->delete($attachment->file_path);
-            $attachment->delete();
-        });
-
-        $product->delete();
-        return response()->json(['message' => 'Product deleted successfully']);
     }
 }

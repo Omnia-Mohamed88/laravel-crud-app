@@ -1,28 +1,21 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Auth; // Ensure this is imported
+use App\Http\Requests\StoreUpdateUserRequest;
+use App\Http\Requests\AssignRoleRequest;
 use App\Http\Resources\UserResource;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-    public function assignRoleToUser(Request $request, $userId)
+    public function assignRoleToUser(AssignRoleRequest $request, $userId)
     {
         // Ensure the user is authenticated and authorized
         if (!Auth::user()->hasRole('superadmin')) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
-    
-        // Validate request data
-        $request->validate([
-            'role' => 'required|string', // Adjust validation if necessary
-        ]);
     
         // Find the user by ID
         $user = User::findOrFail($userId);
@@ -40,26 +33,21 @@ class UserController extends Controller
         return UserResource::collection($users);
     }
    
-    public function store(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8',
-        ]);
+    public function store(StoreUpdateUserRequest $request)
+{
+    // Default role is 'user'
+    $role = $request->input('role', 'user');
 
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
+    $user = User::create([
+        'name' => $request->input('name'),
+        'email' => $request->input('email'),
+        'password' => Hash::make($request->input('password')),
+        'role' => $role, // Set the role
+    ]);
 
-        $user = User::create([
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'password' => Hash::make($request->input('password')),
-        ]);
+    return new UserResource($user);
+}
 
-        return new UserResource($user);
-    }
 
     public function show($id)
     {
@@ -72,22 +60,12 @@ class UserController extends Controller
         return new UserResource($user);
     }
 
-    public function update(Request $request, $id)
+    public function update(StoreUpdateUserRequest $request, $id)
     {
         $user = User::find($id);
 
         if (!$user) {
             return response()->json(['message' => 'User not found'], 404);
-        }
-
-        $validator = Validator::make($request->all(), [
-            'name' => 'sometimes|string|max:255',
-            'email' => 'sometimes|string|email|max:255|unique:users,email,' . $id,
-            'password' => 'sometimes|string|min:8',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
         }
 
         $user->update($request->only(['name', 'email']));

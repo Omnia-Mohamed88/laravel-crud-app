@@ -1,31 +1,22 @@
 <?php
-
 namespace App\Http\Controllers;
-
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Password;
-use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Facades\Password as PasswordFacade;
-use Illuminate\Support\Facades\Log;
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\PasswordResetRequest;
 
+
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+use Illuminate\Support\Facades\Password;
 
 class AuthController extends Controller
 {
     // Register a new user
-    public function register(Request $request)
+    public function register(RegisterRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
+        // If validation fails, the response will be handled by the Form Request class
 
         $user = User::create([
             'name' => $request->input('name'),
@@ -35,32 +26,27 @@ class AuthController extends Controller
 
         $token = $user->createToken('Personal Access Token')->accessToken;
 
-        return response()->json(['token' => $token], 201);
+        // return response()->json(['token' => $token], 201);
+        return response()->json(['user' => $user], 201);
+
     }
-
     // Login a user
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|string|email|max:255',
-            'password' => 'required|string|min:8',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
+        $validated = $request->validated();
 
         $credentials = $request->only('email', 'password');
 
-        if (!auth()->attempt($credentials)) {
+        if (!Auth::attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        $user = auth()->user();
+        $user = Auth::user();
         $token = $user->createToken('Personal Access Token')->accessToken;
 
         return response()->json(['token' => $token], 200);
     }
+
 
     // Logout a user
     public function logout(Request $request)
@@ -70,37 +56,24 @@ class AuthController extends Controller
         return response()->json(['message' => 'Logged out successfully'], 200);
     }
 
-  
-       // Send password reset link
+    // Send password reset link
     public function sendResetLinkEmail(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $request->validate([
             'email' => 'required|string|email|max:255',
         ]);
 
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
-
         $response = Password::sendResetLink($request->only('email'));
 
-        return $response == Password::RESET_LINK_SENT // this is a constant indicating success.
+        return $response == Password::RESET_LINK_SENT
                     ? response()->json(['message' => 'Password reset link sent'], 200)
                     : response()->json(['error' => 'Unable to send password reset link'], 500);
     }
 
     // Reset password
-    public function reset(Request $request)
+    public function reset(PasswordResetRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|string|email|max:255',
-            'token' => 'required|string',
-            'password' => 'required|string|min:8|confirmed',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
+        // $validated = $request->validated();
 
         $response = Password::reset($request->only('email', 'token', 'password', 'password_confirmation'), function ($user, $password) {
             $user->password = Hash::make($password);
@@ -111,5 +84,4 @@ class AuthController extends Controller
                     ? response()->json(['message' => 'Password has been reset'], 200)
                     : response()->json(['error' => 'Unable to reset password'], 500);
     }
-
 }
