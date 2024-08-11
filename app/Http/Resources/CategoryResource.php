@@ -15,7 +15,7 @@ class CategoryResource extends JsonResource
             'attachments' => $this->attachments->map(function ($attachment) {
                 return [
                     'id' => $attachment->id,
-                    'file_path' => asset('storage/' . $attachment->file_path), // Concatenate domain
+                    'file_path' => asset('storage/' . $attachment->file_path),
                     'attachable_type' => $attachment->attachable_type,
                     'attachable_id' => $attachment->attachable_id,
                     'created_at' => $attachment->created_at,

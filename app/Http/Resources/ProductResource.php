@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ProductResource extends JsonResource //formate before responce
+class ProductResource extends JsonResource 
 {
     public function toArray($request)
     {
@@ -14,7 +14,7 @@ class ProductResource extends JsonResource //formate before responce
             'description' => $this->description,
             'price' => $this->price,
             // 'category_id' => $this->category_id,
-            'category' => new CategoryResource($this->whenLoaded('category')), // Include category relationship
+            'category' => new CategoryResource($this->whenLoaded('category')), 
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'attachments' => $this->attachments->map(function ($attachment) {

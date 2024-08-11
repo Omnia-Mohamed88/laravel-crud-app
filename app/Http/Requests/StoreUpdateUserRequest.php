@@ -8,7 +8,7 @@ class StoreUpdateUserRequest extends FormRequest
 {
     public function authorize()
     {
-        return true; // Adjust based on your authorization logic
+        return true; 
     }
 
     public function rules()
@@ -17,12 +17,11 @@ class StoreUpdateUserRequest extends FormRequest
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $this->user,
             'password' => 'sometimes|string|min:8',
-            'role' => 'sometimes|string|in:user,admin,superadmin', // Add this line
+            'role' => 'sometimes|string|in:user,admin,superadmin', 
 
         ];
 
         if ($this->isMethod('post')) {
-            // Rules for creating a new user
             $rules['password'] = 'required|string|min:8';
         }
 

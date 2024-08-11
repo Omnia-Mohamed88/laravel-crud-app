@@ -18,14 +18,11 @@ class CategoryControllerTest extends TestCase
     {
         parent::setUp();
 
-        // Run the seeder to ensure roles and permissions are set up
         Artisan::call('db:seed', ['--class' => 'WebRolesSeeder']);
 
-        // Create a user and assign the admin role
         $user = User::factory()->create();
-        $user->assignRole('admin'); // Ensure this role exists and has permissions
+        $user->assignRole('admin'); 
 
-        // Authenticate the user for API requests
         $this->actingAs($user, 'api');
     }
 

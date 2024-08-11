@@ -8,13 +8,13 @@ class AssignRoleRequest extends FormRequest
 {
     public function authorize()
     {
-        return true; // Adjust based on your authorization logic
+        return true; 
     }
 
     public function rules()
     {
         return [
-            'role' => 'required|string|exists:roles,name', // Ensure the role exists
+            'role' => 'required|string|exists:roles,name', 
         ];
     }
 

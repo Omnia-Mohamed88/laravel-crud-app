@@ -20,12 +20,11 @@ Route::post('password/reset', [AuthController::class, 'reset']);
 // Public GET routes for categories and products
 
 Route::get('categories', [CategoryController::class, 'index']);
-Route::get('categories/{id}', [CategoryController::class, 'show']); // Show category by ID
+Route::get('categories/{id}', [CategoryController::class, 'show']); 
 Route::get('products', [ProductController::class, 'index']);
-Route::get('products/{id}', [ProductController::class, 'show']); // Show product by ID
+Route::get('products/{id}', [ProductController::class, 'show']); 
 
 
-// Apply middleware to ensure authentication
 Route::middleware('auth:api')->group(function () {
     // Category and Product CRUD routes (accessible by admin and superadmin)
     Route::middleware('role:admin,superadmin')->group(function () {

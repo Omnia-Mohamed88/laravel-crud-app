@@ -13,7 +13,7 @@ class StoreCategoryRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true; // Set to true for now, adjust based on your authorization logic
+        return true; 
     }
 
     /**

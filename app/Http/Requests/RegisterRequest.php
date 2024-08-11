@@ -10,7 +10,7 @@ class RegisterRequest extends FormRequest
 {
     public function authorize()
     {
-        return true; // Set to true for now, adjust based on your authorization logic
+        return true; 
     }
 
     public function rules()

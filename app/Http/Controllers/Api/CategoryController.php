@@ -101,15 +101,12 @@ class CategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request)
     {
-        // Access validated data
         $validated = $request->validated();
 
-        // Create the category
         $category = Category::create([
             'title' => $validated['title'],
         ]);
 
-        // Handle attachments if any
         if ($request->hasFile('attachments')) {
             foreach ($request->file('attachments') as $file) {
                 $filePath = $file->store('attachments', 'public');
@@ -236,23 +233,18 @@ class CategoryController extends Controller
             return response()->json(['message' => 'Category not found'], 404);
         }
 
-        // Access validated data
         $validated = $request->validated();
 
-        // Update the category title if present
         if ($request->has('title')) {
             $category->update(['title' => $validated['title']]);
         }
 
-        // Handle attachments
         if ($request->hasFile('attachments')) {
-            // Delete existing attachments
             $category->attachments()->each(function ($attachment) {
                 Storage::disk('public')->delete($attachment->file_path);
                 $attachment->delete();
             });
 
-            // Store new attachments
             foreach ($request->file('attachments') as $file) {
                 $filePath = $file->store('attachments', 'public');
                 $category->attachments()->create([
@@ -306,13 +298,11 @@ class CategoryController extends Controller
             return response()->json(['message' => 'Category not found'], 404);
         }
 
-        // Delete attachments
         $category->attachments()->each(function ($attachment) {
             Storage::disk('public')->delete($attachment->file_path);
             $attachment->delete();
         });
 
-        // Delete the category
         $category->delete();
         return response()->json(['message' => 'Category deleted successfully']);
     }
@@ -350,16 +340,13 @@ class CategoryController extends Controller
      */
     public function import(Request $request)
     {
-        // Validate that a file is provided and it's of the correct type
         $request->validate([
             'file' => 'required|file|mimes:xlsx,csv|max:2048',
         ]);
 
         try {
-            // Import the file using Laravel Excel
             Excel::import(new CategoriesImport, $request->file('file'));
             
-            // Log success message
             \Log::info('File imported successfully');
             return response()->json(['message' => 'Categories imported successfully'], 201);
         } catch (\Exception $e) {

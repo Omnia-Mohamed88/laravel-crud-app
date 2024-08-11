@@ -1,6 +1,6 @@
 <?php
 namespace App\Http\Controllers\Api;
-use App\Http\Controllers\Controller; // Ensure this line is present
+use App\Http\Controllers\Controller; 
 
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
@@ -20,10 +20,8 @@ class ProductController extends Controller
     public function store(StoreProductRequest $request)
     {
         try {
-            // Create the product using validated data
             $product = Product::create($request->only(['title', 'description', 'price', 'category_id']));
 
-            // Handle file attachments
             if ($request->hasFile('attachments')) {
                 foreach ($request->file('attachments') as $file) {
                     $filePath = $file->store('attachments', 'public');
@@ -64,18 +62,14 @@ class ProductController extends Controller
                 return response()->json(['message' => 'Product not found'], 404);
             }
 
-            // Update the product with validated data
             $product->update($request->only(['title', 'description', 'price', 'category_id']));
 
-            // Handle file attachments
             if ($request->hasFile('attachments')) {
-                // Delete old attachments
                 $product->attachments()->each(function ($attachment) {
                     Storage::disk('public')->delete($attachment->file_path);
                     $attachment->delete();
                 });
 
-                // Store new attachments
                 foreach ($request->file('attachments') as $file) {
                     $filePath = $file->store('attachments', 'public');
                     $product->attachments()->create(['file_path' => $filePath]);
@@ -102,7 +96,6 @@ class ProductController extends Controller
                 return response()->json(['message' => 'Product not found'], 404);
             }
 
-            // Delete attachments
             $product->attachments()->each(function ($attachment) {
                 Storage::disk('public')->delete($attachment->file_path);
                 $attachment->delete();

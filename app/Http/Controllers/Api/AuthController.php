@@ -1,6 +1,6 @@
 <?php
 namespace App\Http\Controllers\Api;
-use App\Http\Controllers\Controller; // Ensure this line is present
+use App\Http\Controllers\Controller; 
 
 use Illuminate\Http\Request;
 use App\Http\Requests\LoginRequest;
@@ -18,7 +18,6 @@ class AuthController extends Controller
     // Register a new user
     public function register(RegisterRequest $request)
     {
-        // If validation fails, the response will be handled by the Form Request class
 
         $user = User::create([
             'name' => $request->input('name'),

@@ -54,10 +54,8 @@ class UserController extends Controller
             return response()->json(['error' => 'Unauthorized'], 403);
         }
     
-        // Find the user by ID
         $user = User::findOrFail($userId);
     
-        // Update the role directly
         $user->role = $request->role;
         $user->save();
     
@@ -140,7 +138,7 @@ class UserController extends Controller
             'name' => $request->input('name'),
             'email' => $request->input('email'),
             'password' => Hash::make($request->input('password')),
-            'role' => $role, // Set the role
+            'role' => $role, 
         ]);
 
         return new UserResource($user);

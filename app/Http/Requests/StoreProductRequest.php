@@ -8,7 +8,7 @@ class StoreProductRequest extends FormRequest
 {
     public function authorize()
     {
-        return true; // Adjust based on your authorization logic
+        return true; 
     }
 
     public function rules()

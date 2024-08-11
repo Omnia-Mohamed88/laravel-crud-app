@@ -9,16 +9,14 @@ class CategoriesImport implements ToModel, WithValidation
 {
     public function model(array $row)
 {
-    \Log::info('Import Row Data:', $row); // Log the row data for debugging
+    \Log::info('Import Row Data:', $row); 
 
-    // Validate the row data if needed
     if (isset($row[0])) {
         return new Category([
             'title' => $row[0],
         ]);
     }
 
-    // Return null or handle invalid data as necessary
     return null;
 }
 

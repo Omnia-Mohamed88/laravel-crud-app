@@ -8,13 +8,11 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 
 class LoginRequest extends FormRequest
 {
-    // Allow all users to access this request (or implement custom authorization logic)
     public function authorize()
     {
         return true;
     }
 
-    // Define the validation rules
     public function rules()
     {
         return [
@@ -23,7 +21,6 @@ class LoginRequest extends FormRequest
         ];
     }
 
-    // Define custom error messages
     public function messages()
     {
         return [
@@ -34,10 +31,8 @@ class LoginRequest extends FormRequest
         ];
     }
 
-    // Handle validation failure
     protected function failedValidation(Validator $validator)
     {
-        // Throw a custom HTTP response exception
         throw new HttpResponseException(response()->json([
             'errors' => $validator->errors(),
         ], 422)); // 422 Unprocessable Entity
