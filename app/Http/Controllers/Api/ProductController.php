@@ -1,19 +1,22 @@
 <?php
 namespace App\Http\Controllers\Api;
-use App\Http\Controllers\Controller; 
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Models\Product;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\ProductResource;
+use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // $products = Product::with('attachments')->get();
-        $products = Product::with('attachments', 'category')->get();
+        $perPage = $request->input('per_page', 15);
+
+        $products = Product::with('attachments', 'category')->paginate($perPage);
+
         return ProductResource::collection($products);
     }
 
@@ -42,9 +45,7 @@ class ProductController extends Controller
 
     public function show($id)
     {
-        // $product = Product::with('attachments')->find($id);
         $product = Product::with('attachments', 'category')->find($id);
-
 
         if (!$product) {
             return response()->json(['message' => 'Product not found'], 404);

@@ -14,29 +14,51 @@ use OpenApi\Annotations as OA;
 
 class CategoryController extends Controller
 {
-    /**
+     /**
      * @OA\Get(
      *     path="/api/categories",
      *     summary="Get a list of categories",
      *     tags={"Category"},
+     *     @OA\Parameter(
+     *         name="page",
+     *         in="query",
+     *         description="Page number for pagination",
+     *         required=false,
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
+     *     @OA\Parameter(
+     *         name="per_page",
+     *         in="query",
+     *         description="Number of items per page",
+     *         required=false,
+     *         @OA\Schema(type="integer", example=15)
+     *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="A list of categories",
+     *         description="A paginated list of categories",
      *         @OA\JsonContent(
-     *             type="array",
-     *             @OA\Items(
-     *                 type="object",
-     *                 @OA\Property(property="id", type="integer", example=1),
-     *                 @OA\Property(property="title", type="string", example="Technology"),
-     *                 @OA\Property(
-     *                     property="attachments",
-     *                     type="array",
-     *                     @OA\Items(
-     *                         type="object",
-     *                         @OA\Property(property="file_path", type="string", example="/path/to/file.jpg")
+     *             type="object",
+     *             @OA\Property(property="current_page", type="integer", example=1),
+     *             @OA\Property(property="data", type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(property="id", type="integer", example=1),
+     *                     @OA\Property(property="title", type="string", example="Technology"),
+     *                     @OA\Property(
+     *                         property="attachments",
+     *                         type="array",
+     *                         @OA\Items(
+     *                             type="object",
+     *                             @OA\Property(property="file_path", type="string", example="/path/to/file.jpg")
+     *                         )
      *                     )
      *                 )
-     *             )
+     *             ),
+     *             @OA\Property(property="first_page_url", type="string", example="http://example.com/api/categories?page=1"),
+     *             @OA\Property(property="last_page_url", type="string", example="http://example.com/api/categories?page=5"),
+     *             @OA\Property(property="next_page_url", type="string", example="http://example.com/api/categories?page=2"),
+     *             @OA\Property(property="prev_page_url", type="string", example="http://example.com/api/categories?page=1"),
+     *             @OA\Property(property="total", type="integer", example=100)
      *         )
      *     ),
      *     @OA\Response(
@@ -48,9 +70,11 @@ class CategoryController extends Controller
      *     )
      * )
      */
-    public function index()
+    public function index(Request $request)
     {
-        $categories = Category::with('attachments')->get();
+        $perPage = $request->input('per_page', 15); 
+        $categories = Category::with('attachments')->paginate($perPage);
+
         return CategoryResource::collection($categories);
     }
 
