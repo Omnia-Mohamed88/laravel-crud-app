@@ -11,14 +11,43 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+    // public function index(Request $request)
+    // {
+    //     $perPage = $request->input('per_page', 15);
+
+    //     $products = Product::with('attachments', 'category')->paginate($perPage);
+
+    //     return ProductResource::collection($products);
+    // }
+
+
     public function index(Request $request)
     {
-        $perPage = $request->input('per_page', 15);
-
-        $products = Product::with('attachments', 'category')->paginate($perPage);
-
+        $perPage = (int) $request->input('per_page', 15); 
+        $search = $request->input('search', ''); 
+        $category_id = $request->input('category_id');
+    
+        $query = Product::with('attachments', 'category');
+    
+        // Apply search filter
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+    
+        // // Apply category filter
+        // if ($category_id) {
+        //     $query->where('category_id', $category_id);
+        // }
+    
+        $products = $query->paginate($perPage);
+    
         return ProductResource::collection($products);
     }
+    
+
 
     public function store(StoreProductRequest $request)
     {

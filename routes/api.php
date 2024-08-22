@@ -23,14 +23,14 @@ Route::get('categories', [CategoryController::class, 'index']);
 Route::get('categories/{id}', [CategoryController::class, 'show']); 
 Route::get('products', [ProductController::class, 'index']);
 Route::get('products/{id}', [ProductController::class, 'show']); 
+Route::apiResource('categories', CategoryController::class)->except(['index' , 'show']);
+Route::apiResource('products', ProductController::class)->except(['index','show']);
 
 
 Route::middleware('auth:api')->group(function () {
     // Category and Product CRUD routes (accessible by admin and superadmin)
     Route::middleware('role:admin,superadmin')->group(function () {
-        Route::apiResource('categories', CategoryController::class)->except(['index' , 'show']);
         Route::post('categories/import', [CategoryController::class, 'import']);
-        Route::apiResource('products', ProductController::class)->except(['index','show']);
     });
 
     // User CRUD routes (only accessible by superadmin)

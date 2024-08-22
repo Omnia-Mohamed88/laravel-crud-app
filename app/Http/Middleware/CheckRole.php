@@ -19,7 +19,7 @@ class CheckRole
         // Split roles by comma
         $roles = explode(',', $roles);
 
-        $userRole = Auth::check() ? Auth::user()->role : null;
+        $userRole = Auth::check() ? Auth::user()->role : null; 
 
         if ($userRole === 'superadmin' || in_array($userRole, $roles)) {
             return $next($request);
