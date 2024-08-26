@@ -8,6 +8,7 @@ use App\Models\Product;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\ProductResource;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
@@ -71,6 +72,38 @@ class ProductController extends Controller
     return ProductResource::collection($products);
 }
 
+// public function store(StoreProductRequest $request)
+// {
+//     try {
+//         $data = $request->only(['title', 'description', 'price', 'category_id']);
+        
+//         $product = Product::create($data);
+
+//         Log::info($request) ;
+//         if ($request->has('image_url')) {
+//             $imageUrl = $request->input('image_url');
+            
+//             $product->attachments()->create(['file_path' => $imageUrl]);
+//         }
+
+//         // if ($request->hasFile('attachments')) {
+//         //     foreach ($request->file('attachments') as $file) {
+//         //         $filePath = $file->store('attachments', 'public');
+//         //         $product->attachments()->create(['file_path' => $filePath]);
+//         //     }
+//         // }
+
+//         return response()->json(new ProductResource($product), 201);
+
+//     } catch (\Exception $e) {
+//         return response()->json([
+//             'success' => false,
+//             'message' => 'An error occurred',
+//             'error' => $e->getMessage()
+//         ], 500);
+//     }
+// }
+
 public function store(StoreProductRequest $request)
 {
     try {
@@ -78,9 +111,8 @@ public function store(StoreProductRequest $request)
         
         $product = Product::create($data);
 
-        if ($request->has('image_url')) {
+        if ($request->has('image_url') && $request->input('image_url')) {
             $imageUrl = $request->input('image_url');
-            
             $product->attachments()->create(['file_path' => $imageUrl]);
         }
 
@@ -104,7 +136,6 @@ public function store(StoreProductRequest $request)
 
 
 
-
 public function update(UpdateProductRequest $request, $id)
 {
     try {
@@ -118,7 +149,7 @@ public function update(UpdateProductRequest $request, $id)
 
         $product->update($data);
 
-        if ($request->has('image_url')) {
+        if ($request->has('image_url') && $request->input('image_url')) {
             $imageUrl = $request->input('image_url');
 
             $product->attachments()->where('file_path', $product->image_url)->delete();
@@ -148,7 +179,6 @@ public function update(UpdateProductRequest $request, $id)
         ], 500);
     }
 }
-
 
 
     public function show($id)
