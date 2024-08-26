@@ -18,7 +18,10 @@ class UpdateProductRequest extends FormRequest
             'description' => 'sometimes|string',
             'price' => 'sometimes|numeric',
             'category_id' => 'sometimes|exists:categories,id',
-            'attachments.*' => 'nullable|file|mimes:jpg,jpeg,png,gif|max:2048',
+            // 'attachments.*' => 'nullable|file|mimes:jpg,jpeg,png,gif|max:2048',
+            'image_url' => 'nullable|string', 
+            'attachments.*' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+
         ];
     }
 

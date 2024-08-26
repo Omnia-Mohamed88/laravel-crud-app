@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\PermissionController;
 use App\Http\Controllers\Api\RolePermissionController;
+use App\Http\Controllers\Api\UploadController;
 
 
 // Public routes
@@ -27,6 +28,7 @@ Route::get('products/{id}', [ProductController::class, 'show']);
 
 Route::middleware(['auth:api', 'role:admin,superadmin'])->group(function () {
     Route::post('categories/import', [CategoryController::class, 'import']);
+    Route::post('/upload-image', [UploadController::class, 'uploadImage']);
     Route::apiResource('categories', CategoryController::class)->except(['index', 'show']);
     Route::apiResource('products', ProductController::class)->except(['index', 'show']);
 });
