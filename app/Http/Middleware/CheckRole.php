@@ -3,6 +3,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class CheckRole
 {
@@ -16,12 +17,20 @@ class CheckRole
      */
     public function handle($request, Closure $next, $roles)
     {
-        // Split roles by comma
         $roles = explode(',', $roles);
 
-        $userRole = Auth::check() ? Auth::user()->role : null; 
+        $user = Auth::user();
 
-        if ($userRole === 'superadmin' || in_array($userRole, $roles)) {
+        if (!$user) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $userRoles = $user->roles->pluck('name')->toArray();
+
+        Log::info('User Roles: ' . json_encode($userRoles)); 
+        Log::info('Required Roles: ' . json_encode($roles));
+
+        if ($user->hasRole('superadmin') || array_intersect($roles, $userRoles)) {
             return $next($request);
         }
 

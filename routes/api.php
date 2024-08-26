@@ -23,20 +23,28 @@ Route::get('categories', [CategoryController::class, 'index']);
 Route::get('categories/{id}', [CategoryController::class, 'show']); 
 Route::get('products', [ProductController::class, 'index']);
 Route::get('products/{id}', [ProductController::class, 'show']); 
-Route::apiResource('categories', CategoryController::class)->except(['index' , 'show']);
-Route::apiResource('products', ProductController::class)->except(['index','show']);
 
 
+Route::middleware(['auth:api', 'role:admin,superadmin'])->group(function () {
+    Route::post('categories/import', [CategoryController::class, 'import']);
+    Route::apiResource('categories', CategoryController::class)->except(['index', 'show']);
+    Route::apiResource('products', ProductController::class)->except(['index', 'show']);
+});
 Route::middleware('auth:api')->group(function () {
     // Category and Product CRUD routes (accessible by admin and superadmin)
-    Route::middleware('role:admin,superadmin')->group(function () {
-        Route::post('categories/import', [CategoryController::class, 'import']);
-    });
+    // Route::middleware('role:admin,superadmin')->group(function () {
+    //     Route::post('categories/import', [CategoryController::class, 'import']);
+    //     Route::apiResource('categories', CategoryController::class)->except(['index' , 'show']);
+    //     Route::apiResource('products', ProductController::class)->except(['index','show']);
+
+    // });
+
+   
 
     // User CRUD routes (only accessible by superadmin)
     Route::middleware('role:superadmin')->group(function () {
-        Route::apiResource('users', UserController::class);
         Route::post('users/{user}/roles', [UserController::class, 'assignRoleToUser']);
+Route::apiResource('users', UserController::class);
     });
 
     // Role routes (accessible by superadmin)

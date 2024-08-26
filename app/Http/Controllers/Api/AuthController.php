@@ -25,6 +25,8 @@ class AuthController extends Controller
             'password' => Hash::make($request->input('password')),
         ]);
 
+        $user->assignRole('user');
+
         $token = $user->createToken('Personal Access Token')->accessToken;
 
         // return response()->json(['token' => $token], 201);
@@ -32,21 +34,50 @@ class AuthController extends Controller
 
     }
     // Login a user
+    // public function login(LoginRequest $request)
+    // {
+    //     $validated = $request->validated();
+
+    //     $credentials = $request->only('email', 'password');
+
+    //     if (!Auth::attempt($credentials)) {
+    //         return response()->json(['error' => 'Unauthorized'], 401);
+    //     }
+
+    //     $user = Auth::user();
+    //     $token = $user->createToken('Personal Access Token')->accessToken;
+
+    //     return response()->json(['token' => $token], 200);
+    // }
     public function login(LoginRequest $request)
-    {
-        $validated = $request->validated();
+{
+    $validated = $request->validated();
 
-        $credentials = $request->only('email', 'password');
+    $credentials = $request->only('email', 'password');
 
-        if (!Auth::attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
-
-        $user = Auth::user();
-        $token = $user->createToken('Personal Access Token')->accessToken;
-
-        return response()->json(['token' => $token], 200);
+    if (!Auth::attempt($credentials)) {
+        return response()->json(['error' => 'Unauthorized'], 401);
     }
+
+    $user = Auth::user();
+    $token = $user->createToken('Personal Access Token')->accessToken;
+
+    // Load roles for the user
+    $roles = $user->getRoleNames(); 
+
+    return response()->json([
+        'token' => $token,
+        'user' => [
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'roles' => $roles, 
+            'created_at' => $user->created_at,
+            'updated_at' => $user->updated_at,
+        ]
+    ], 200);
+}
+
 
 
     // Logout a user

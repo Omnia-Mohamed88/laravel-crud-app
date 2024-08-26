@@ -11,22 +11,19 @@ class WebRolesSeeder extends Seeder
 {
     public function run()
     {
-        // Create roles with the 'web' guard
         $admin = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
         $superadmin = Role::firstOrCreate(['name' => 'superadmin', 'guard_name' => 'web']);
+        $user = Role::firstOrCreate(['name' => 'user', 'guard_name' => 'web']); 
 
-        // Create permissions with the 'web' guard
         $manageCategories = Permission::firstOrCreate(['name' => 'manage_categories', 'guard_name' => 'web']);
         $manageUsers = Permission::firstOrCreate(['name' => 'manage_users', 'guard_name' => 'web']);
 
-        // Assign permissions to roles
         $admin->givePermissionTo([$manageCategories, $manageUsers]);
         $superadmin->givePermissionTo([$manageCategories, $manageUsers]);
 
-        // Optionally assign the role to a user
-        $user = User::first(); // Adjust this if necessary
+        $user = User::first(); 
         if ($user) {
-            $user->assignRole('admin'); // Ensure the user is assigned the 'admin' role
+            $user->assignRole('admin'); 
         }
     }
 }

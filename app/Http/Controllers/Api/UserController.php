@@ -138,9 +138,10 @@ class UserController extends Controller
             'name' => $request->input('name'),
             'email' => $request->input('email'),
             'password' => Hash::make($request->input('password')),
-            'role' => $role, 
+            // 'role' => $role, 
         ]);
-
+        $role = $request->input('role', 'user');
+        $user->assignRole($role);
         return new UserResource($user);
     }
 
