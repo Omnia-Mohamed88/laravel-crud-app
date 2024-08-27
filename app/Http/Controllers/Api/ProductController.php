@@ -136,42 +136,90 @@ public function store(StoreProductRequest $request)
 
 
 
+// public function update(UpdateProductRequest $request, $id)
+// {
+//     try {
+//         $product = Product::find($id);
+
+//         if (!$product) {
+//             return response()->json(['message' => 'Product not found'], 404);
+//         }
+
+//         $data = $request->only(['title', 'description', 'price', 'category_id']);
+
+//         $product->update($data);
+
+//         if ($request->has('image_url') && $request->input('image_url')) {
+//             $imageUrl = $request->input('image_url');
+
+//             $product->attachments()->where('file_path', $product->image_url)->delete();
+
+//             $product->attachments()->create(['file_path' => $imageUrl]);
+//         }
+
+//         if ($request->hasFile('attachments')) {
+//             $product->attachments()->each(function ($attachment) {
+//                 Storage::disk('public')->delete($attachment->file_path);
+//                 $attachment->delete();
+//             });
+
+//             foreach ($request->file('attachments') as $file) {
+//                 $filePath = $file->store('attachments', 'public');
+//                 $product->attachments()->create(['file_path' => $filePath]);
+//             }
+//         }
+
+//         return response()->json(new ProductResource($product));
+
+//     } catch (\Exception $e) {
+//         return response()->json([
+//             'success' => false,
+//             'message' => 'An error occurred',
+//             'error' => $e->getMessage()
+//         ], 500);
+//     }
+// }
+
+
 public function update(UpdateProductRequest $request, $id)
 {
     try {
-        $product = Product::find($id);
-
-        if (!$product) {
-            return response()->json(['message' => 'Product not found'], 404);
-        }
+        $product = Product::findOrFail($id);
 
         $data = $request->only(['title', 'description', 'price', 'category_id']);
-
         $product->update($data);
+
+        $oldAttachments = $product->attachments;
+        foreach ($oldAttachments as $attachment) {
+            $filePath = str_replace('http://localhost:8000/storage/', '', $attachment->file_path);
+
+            Storage::disk('public')->delete($filePath);
+
+            $attachment->delete();
+        }
 
         if ($request->has('image_url') && $request->input('image_url')) {
             $imageUrl = $request->input('image_url');
-
-            $product->attachments()->where('file_path', $product->image_url)->delete();
 
             $product->attachments()->create(['file_path' => $imageUrl]);
         }
 
         if ($request->hasFile('attachments')) {
-            $product->attachments()->each(function ($attachment) {
-                Storage::disk('public')->delete($attachment->file_path);
-                $attachment->delete();
-            });
-
             foreach ($request->file('attachments') as $file) {
                 $filePath = $file->store('attachments', 'public');
-                $product->attachments()->create(['file_path' => $filePath]);
+
+                $product->attachments()->create(['file_path' => Storage::disk('public')->url($filePath)]);
             }
         }
 
-        return response()->json(new ProductResource($product));
+        return response()->json(new ProductResource($product->load('attachments')), 200);
 
     } catch (\Exception $e) {
+        \Log::error('Error updating product:', [
+            'message' => $e->getMessage(),
+            'trace' => $e->getTraceAsString()
+        ]);
+
         return response()->json([
             'success' => false,
             'message' => 'An error occurred',
@@ -179,6 +227,10 @@ public function update(UpdateProductRequest $request, $id)
         ], 500);
     }
 }
+
+
+
+
 
 
     public function show($id)
