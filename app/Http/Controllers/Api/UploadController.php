@@ -27,9 +27,30 @@ class UploadController extends Controller
     return response()->json(['message' => 'No files uploaded', 'urls' => $urls], 200);
 }
 
+public function deleteImage(Request $request)
+{
+    $request->validate([
+        'file_url' => 'required|string',
+    ]);
+
+    $fileUrl = $request->input('file_url');
+
+    $filePath = parse_url($fileUrl, PHP_URL_PATH); 
+    $filePath = str_replace('/storage/', 'public/', $filePath);
+
+    \Log::info("Attempting to delete file at: " . $filePath);
+
+    if (Storage::exists($filePath)) {
+        Storage::delete($filePath);
+        return response()->json(['message' => 'File deleted successfully'], 200);
+    }
+
+    return response()->json(['message' => 'File not found'], 404);
 }
 
 
+
+}
 //     public function uploadImage(Request $request)
 // {
 //     $request->validate([

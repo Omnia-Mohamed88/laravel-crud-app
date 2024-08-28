@@ -29,6 +29,7 @@ Route::get('products/{id}', [ProductController::class, 'show']);
 Route::middleware(['auth:api', 'role:admin,superadmin'])->group(function () {
     Route::post('categories/import', [CategoryController::class, 'import']);
     Route::post('/upload-image', [UploadController::class, 'uploadImage']);
+    Route::post('/delete-image', [UploadController::class, 'deleteImage']);
     Route::apiResource('categories', CategoryController::class)->except(['index', 'show']);
     Route::apiResource('products', ProductController::class)->except(['index', 'show']);
 });
