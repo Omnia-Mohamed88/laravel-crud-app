@@ -18,10 +18,8 @@ class StoreProductRequest extends FormRequest
             'description' => 'nullable|string',
             'price' => 'nullable|numeric',
             'category_id' => 'nullable|exists:categories,id',
-            // 'attachments.*' => 'nullable|file|mimes:jpg,jpeg,png,gif|max:2048',
-            'image_url' => 'nullable|string', 
+            'image_url' => 'nullable|string',
             'attachments.*' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
-
         ];
     }
 
@@ -34,7 +32,7 @@ class StoreProductRequest extends FormRequest
             'description.string' => 'The description must be a string.',
             'price.numeric' => 'The price must be a number.',
             'category_id.exists' => 'The selected category does not exist.',
-            'attachments.*.file' => 'Each attachment must be a file.',
+            'attachments.*.image' => 'Each attachment must be an image.',
             'attachments.*.mimes' => 'The attachment must be a file of type: jpg, jpeg, png, gif.',
             'attachments.*.max' => 'Each attachment may not be greater than 2MB.',
         ];
