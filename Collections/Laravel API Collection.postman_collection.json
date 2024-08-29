@@ -534,7 +534,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiOTk5OGNiNTdmNTBiMzE1ZDQ3MDMxNDI0OGNmMTYzNmRjZDM0MDgyNTNhNGJmMzY1NjE1MzFiNGE1ZjFkYWNkMDA0MGNkOWRmMmM3YmE1YjkiLCJpYXQiOjE3MjMzNTkzNDQuMzU2MDU1LCJuYmYiOjE3MjMzNTkzNDQuMzU2MDY0LCJleHAiOjE3NTQ4OTUzNDQuMzA2NzU2LCJzdWIiOiI3Iiwic2NvcGVzIjpbXX0.Zdo-UVE6mA79OTK-XqJTPPtqhkmPif0wgSAFs13tfCUNYSs7OFOFjdI00deJHnRYWlD5KBN-g1iuRgDWM55lzDBsLzJomr3Yw5Pw2Gl3sWo-MHufnETL348XgWuFsMMcsEI62Fun-9E-Fc2BTnh8rYu6se4GptwlRSiiWKa191hKtyG6FTZYjLi4eM7g0JYgSevM6SdMwkRdf7adFi3ZpgDJR0DHLAxsJ8j8XUGe-7qCIm-3zHLCbArkE1UQ59w5i2o-ybQ8_pqK464TL08dQh5zH1ZA6-lIDDseJGoO1-38Cmekh65fI2eZ4dXc8CUsn4gE2EmlvI9C9sFqFGo6vfaDENj91j5yl3Nzq4q8aM04SusBIEr0kYtW3kTuWhcKJZYG3qV7341zBUYwaZW2hN9UU3I41CTn94CYDWX_zZ7nOUnnq__dTQuFKvVuSZz0ymSy4KryPJehf4JwrnPuQqv7VF8edGZZN9UhXLz2NTarurAQwE2gddp1DLnQKqRHpHt70Nb3dm09u0ayxHkYMkJgVoQlhGXfsmwvizL86fhaQjHsRUa45Te8TI5sxTGZ1zTcYqC4MBqzwjVzuNsXz7tZzn2oX0OJprW3Qvrsgw8C3x54CJREISBc3r4Mzi9T8gbIw9YKf2O4Hj0bdk4zUDN_rvsx0kjR2rsYQpt2yJQ",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiYjVlMWVkYWVjYjU1MjhhYmE1MTcyNGI1YzAxOTQzZWU5MDhmOWMxOWIyYzUxOWNhNjhkOGJmZjEzOGIzYmM1ZmRkZThlOGM4MmI5NGM4MzMiLCJpYXQiOjE3MjQ2NjMzNTMuODEyMzY1LCJuYmYiOjE3MjQ2NjMzNTMuODEyMzcxLCJleHAiOjE3NTYxOTkzNTMuNTkyMjQyLCJzdWIiOiIyMCIsInNjb3BlcyI6W119.IrEaDLnivCb8ioLMyVE8lWkYHtX8v0HHodQt2448dnJgigwsG6K6lrP43KDovqhkIVyuxHbZJw7PPslx-3kz5LT4CD3sRGSxtsm9FwFDcNbYNSpvTpsJJx-gRmlUF5N_co7VZMptQMahKU_hyVRuUd0Uwfz5iJSDkPKHZuY9I7mjYLpe-PNS1Vy2u13HTqKdfL8MtgghoEDUW4Qdfosr7fKF8HBMT5mgzhrgcRtG7nRG0qzolOXlvWRfgLJXhIMqIqBld-TMUQFTtaPM0tz7Huk9W09YMoYSHzB2eennL67fFw05HzFqDmysu1bKveZbhaUjOQr6zBxtMgLRlLyTdhDEu40dt3N9rDkjUfdqrPHcH52CVezI-10X4TZdqkTnFIP7UQ_SA6RJCj1wjWTSo39kOxRvZRgC2_DBkrpnwRnnI707sGeFG2a7ec6OQkPmEUacZyxRJtG0SjXcSev1KEdBjdSXnWa_J05jU3ICm_vN_lT7gH4X9sfui1CFGtXJpU1vThOa6VK8C7rTYQKzr_hMu2wBrBuYJB09WZyAG3hw3D3WVWZ70uURN4MpzeFFTXIFK3_ezuMCa7gAStTykRkdXTE56OpE-1A8C05pjr52XEqf_G4B6zoT-mOJJ-UnpYUAvCpEFQZTsIY3vGAHjvGY621Izpi3tJnQXa1a83A",
 									"type": "string"
 								}
 							]
@@ -552,7 +552,7 @@
 							"formdata": [
 								{
 									"key": "title",
-									"value": "New Product ",
+									"value": "New Product 22",
 									"type": "text"
 								},
 								{
@@ -567,13 +567,13 @@
 								},
 								{
 									"key": "category_id",
-									"value": "9",
+									"value": "6",
 									"type": "text"
 								},
 								{
-									"key": "attachments[]",
-									"type": "file",
-									"src": "/C:/Users/omnia_salama/OneDrive - Efinance/Pictures/Screenshots/image1.png"
+									"key": "image_url",
+									"value": "/storage/attachments/feWZY1lJjntZnMuaUXAONq8130cW9HhjqWp7mhUv.png",
+									"type": "text"
 								}
 							]
 						},
@@ -618,7 +618,7 @@
 							"formdata": [
 								{
 									"key": "title",
-									"value": "update product",
+									"value": "update product2",
 									"type": "text"
 								},
 								{
@@ -633,13 +633,13 @@
 								},
 								{
 									"key": "category_id",
-									"value": "9",
+									"value": "6",
 									"type": "text"
 								},
 								{
-									"key": "attachements[]",
-									"type": "file",
-									"src": "/C:/Users/omnia_salama/OneDrive - Efinance/Pictures/Screenshots/image1.png"
+									"key": "image_url",
+									"value": "/storage/attachments/DwQKOfHzrSHhuFsMeGfSqN3CCPN0bR0ktISbgvwh.png",
+									"type": "text"
 								},
 								{
 									"key": "_method",
@@ -649,7 +649,7 @@
 							]
 						},
 						"url": {
-							"raw": "http://localhost:8000/api/products/2",
+							"raw": "http://localhost:8000/api/products/17",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -658,7 +658,7 @@
 							"path": [
 								"api",
 								"products",
-								"2"
+								"17"
 							]
 						}
 					},
@@ -724,6 +724,36 @@
 								{
 									"key": "page",
 									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "search",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/products?per_page=10&search=Technologies\n",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"products"
+							],
+							"query": [
+								{
+									"key": "per_page",
+									"value": "10"
+								},
+								{
+									"key": "search",
+									"value": "Technologies\n"
 								}
 							]
 						}
@@ -1302,6 +1332,97 @@
 								"api",
 								"permissions",
 								"16"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "images",
+			"item": [
+				{
+					"name": "delete image",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiYjVlMWVkYWVjYjU1MjhhYmE1MTcyNGI1YzAxOTQzZWU5MDhmOWMxOWIyYzUxOWNhNjhkOGJmZjEzOGIzYmM1ZmRkZThlOGM4MmI5NGM4MzMiLCJpYXQiOjE3MjQ2NjMzNTMuODEyMzY1LCJuYmYiOjE3MjQ2NjMzNTMuODEyMzcxLCJleHAiOjE3NTYxOTkzNTMuNTkyMjQyLCJzdWIiOiIyMCIsInNjb3BlcyI6W119.IrEaDLnivCb8ioLMyVE8lWkYHtX8v0HHodQt2448dnJgigwsG6K6lrP43KDovqhkIVyuxHbZJw7PPslx-3kz5LT4CD3sRGSxtsm9FwFDcNbYNSpvTpsJJx-gRmlUF5N_co7VZMptQMahKU_hyVRuUd0Uwfz5iJSDkPKHZuY9I7mjYLpe-PNS1Vy2u13HTqKdfL8MtgghoEDUW4Qdfosr7fKF8HBMT5mgzhrgcRtG7nRG0qzolOXlvWRfgLJXhIMqIqBld-TMUQFTtaPM0tz7Huk9W09YMoYSHzB2eennL67fFw05HzFqDmysu1bKveZbhaUjOQr6zBxtMgLRlLyTdhDEu40dt3N9rDkjUfdqrPHcH52CVezI-10X4TZdqkTnFIP7UQ_SA6RJCj1wjWTSo39kOxRvZRgC2_DBkrpnwRnnI707sGeFG2a7ec6OQkPmEUacZyxRJtG0SjXcSev1KEdBjdSXnWa_J05jU3ICm_vN_lT7gH4X9sfui1CFGtXJpU1vThOa6VK8C7rTYQKzr_hMu2wBrBuYJB09WZyAG3hw3D3WVWZ70uURN4MpzeFFTXIFK3_ezuMCa7gAStTykRkdXTE56OpE-1A8C05pjr52XEqf_G4B6zoT-mOJJ-UnpYUAvCpEFQZTsIY3vGAHjvGY621Izpi3tJnQXa1a83A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file_url",
+									"value": "/storage/attachments/G8LrJtUCOql1xskRH7qhnYYpPvfAGlvSSJCpsrUZ.png",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/delete-image",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"delete-image"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "upload-image",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiYjVlMWVkYWVjYjU1MjhhYmE1MTcyNGI1YzAxOTQzZWU5MDhmOWMxOWIyYzUxOWNhNjhkOGJmZjEzOGIzYmM1ZmRkZThlOGM4MmI5NGM4MzMiLCJpYXQiOjE3MjQ2NjMzNTMuODEyMzY1LCJuYmYiOjE3MjQ2NjMzNTMuODEyMzcxLCJleHAiOjE3NTYxOTkzNTMuNTkyMjQyLCJzdWIiOiIyMCIsInNjb3BlcyI6W119.IrEaDLnivCb8ioLMyVE8lWkYHtX8v0HHodQt2448dnJgigwsG6K6lrP43KDovqhkIVyuxHbZJw7PPslx-3kz5LT4CD3sRGSxtsm9FwFDcNbYNSpvTpsJJx-gRmlUF5N_co7VZMptQMahKU_hyVRuUd0Uwfz5iJSDkPKHZuY9I7mjYLpe-PNS1Vy2u13HTqKdfL8MtgghoEDUW4Qdfosr7fKF8HBMT5mgzhrgcRtG7nRG0qzolOXlvWRfgLJXhIMqIqBld-TMUQFTtaPM0tz7Huk9W09YMoYSHzB2eennL67fFw05HzFqDmysu1bKveZbhaUjOQr6zBxtMgLRlLyTdhDEu40dt3N9rDkjUfdqrPHcH52CVezI-10X4TZdqkTnFIP7UQ_SA6RJCj1wjWTSo39kOxRvZRgC2_DBkrpnwRnnI707sGeFG2a7ec6OQkPmEUacZyxRJtG0SjXcSev1KEdBjdSXnWa_J05jU3ICm_vN_lT7gH4X9sfui1CFGtXJpU1vThOa6VK8C7rTYQKzr_hMu2wBrBuYJB09WZyAG3hw3D3WVWZ70uURN4MpzeFFTXIFK3_ezuMCa7gAStTykRkdXTE56OpE-1A8C05pjr52XEqf_G4B6zoT-mOJJ-UnpYUAvCpEFQZTsIY3vGAHjvGY621Izpi3tJnQXa1a83A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "files[]",
+									"type": "file",
+									"src": "/C:/Users/omnia_salama/OneDrive - Efinance/Pictures/Screenshots/image1.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/upload-image",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"upload-image"
 							]
 						}
 					},
