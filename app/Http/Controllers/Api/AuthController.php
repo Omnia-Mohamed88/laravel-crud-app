@@ -16,23 +16,46 @@ use Illuminate\Support\Facades\Password;
 class AuthController extends Controller
 {
     // Register a new user
-    public function register(RegisterRequest $request)
-    {
+    // public function register(RegisterRequest $request)
+    // {
 
-        $user = User::create([
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'password' => Hash::make($request->input('password')),
-        ]);
+    //     $user = User::create([
+    //         'name' => $request->input('name'),
+    //         'email' => $request->input('email'),
+    //         'password' => Hash::make($request->input('password')),
+    //     ]);
 
-        $user->assignRole('user');
+    //     $user->assignRole('user');
 
-        $token = $user->createToken('Personal Access Token')->accessToken;
+    //     $token = $user->createToken('Personal Access Token')->accessToken;
 
-        // return response()->json(['token' => $token], 201);
-        return response()->json(['user' => $user], 201);
+    //     // return response()->json(['token' => $token], 201);
+    //     return response()->json(['user' => $user], 201);
 
-    }
+    // }
+    // Register a new user
+public function register(RegisterRequest $request)
+{
+    $user = User::create([
+        'name' => $request->input('name'),
+        'email' => $request->input('email'),
+        'password' => Hash::make($request->input('password')),
+    ]);
+
+    $user->assignRole('user');
+
+    $token = $user->createToken('Personal Access Token')->accessToken;
+
+    return response()->json([
+        'token' => $token,
+        'user' => [
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+        ]
+    ], 201);
+}
+
     // Login a user
     // public function login(LoginRequest $request)
     // {
