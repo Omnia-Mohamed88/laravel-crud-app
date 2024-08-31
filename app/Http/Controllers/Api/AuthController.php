@@ -12,6 +12,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use Illuminate\Support\Facades\Password;
+use App\Notifications\CustomResetPasswordNotification;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
+
+
 
 class AuthController extends Controller
 {
@@ -140,32 +145,34 @@ public function login(LoginRequest $request)
         return response()->json(['message' => 'Logged out successfully'], 200);
     }
 
-    // Send password reset link
-    public function sendResetLinkEmail(Request $request)
-    {
-        $request->validate([
-            'email' => 'required|string|email|max:255',
-        ]);
+  // Send password reset link
+  public function sendResetLinkEmail(Request $request)
+{
+    $request->validate([
+        'email' => 'required|string|email|max:255',
+    ]);
 
-        $response = Password::sendResetLink($request->only('email'));
+    $response = Password::sendResetLink($request->only('email'), function ($user, $token) {
+        $user->notify(new CustomResetPasswordNotification($token));
+    });
 
-        return $response == Password::RESET_LINK_SENT
-                    ? response()->json(['message' => 'Password reset link sent'], 200)
-                    : response()->json(['error' => 'Unable to send password reset link'], 500);
-    }
+    return $response == Password::RESET_LINK_SENT
+                ? response()->json(['message' => 'Password reset link sent'], 200)
+                : response()->json(['error' => 'Unable to send password reset link'], 500);
+}
 
-    // Reset password
-    public function reset(PasswordResetRequest $request)
-    {
-        // $validated = $request->validated();
+  // Reset password
+  public function reset(PasswordResetRequest $request)
+  {
+      // $validated = $request->validated();
 
-        $response = Password::reset($request->only('email', 'token', 'password', 'password_confirmation'), function ($user, $password) {
-            $user->password = Hash::make($password);
-            $user->save();
-        });
+      $response = Password::reset($request->only('email', 'token', 'password', 'password_confirmation'), function ($user, $password) {
+          $user->password = Hash::make($password);
+          $user->save();
+      });
 
-        return $response == Password::PASSWORD_RESET
-                    ? response()->json(['message' => 'Password has been reset'], 200)
-                    : response()->json(['error' => 'Unable to reset password'], 500);
-    }
+      return $response == Password::PASSWORD_RESET
+                  ? response()->json(['message' => 'Password has been reset'], 200)
+                  : response()->json(['error' => 'Unable to reset password'], 500);
+  }
 }

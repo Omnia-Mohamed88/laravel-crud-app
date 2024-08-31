@@ -6,6 +6,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Support\Facades\Log;
 
 class PasswordResetRequest extends FormRequest
 {
@@ -36,10 +37,13 @@ class PasswordResetRequest extends FormRequest
     }
 
     protected function failedValidation(Validator $validator)
-    {
-        throw new HttpResponseException(response()->json([
-            'errors' => $validator->errors(),
-        ], 422)); // 422 Unprocessable Entity
-    }
+{
+    $errors = $validator->errors();
+    Log::error('Validation errors:', $errors->toArray());
+    throw new HttpResponseException(response()->json([
+        'errors' => $errors,
+    ], 422));
+}
+
 }
 
