@@ -18,7 +18,8 @@ class StoreProductRequest extends FormRequest
             'description' => 'nullable|string',
             'price' => 'nullable|numeric',
             'category_id' => 'nullable|exists:categories,id',
-            'image_url' => 'nullable|string',
+            'image_url' => 'nullable|array',  
+            'image_url.*' => 'string',  
             'attachments.*' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
         ];
     }
