@@ -165,7 +165,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"newpassword\",\n  \"password_confirmation\": \"newpassword\",\n  \"token\": \"reset_token\"\n}",
+							"raw": "{\n  \"email\": \"moni.salama88@gmail.com\",\n  \"password\": \"newpassword\",\n  \"password_confirmation\": \"newpassword\",\n  \"token\": \"9b780dd1f3c567bcd0ce172f5374c6757c5ebf408d50954d36cceadee0744f9b\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -511,7 +511,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8000/api/products/1",
+							"raw": "http://localhost:8000/api/products/123",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -520,7 +520,7 @@
 							"path": [
 								"api",
 								"products",
-								"1"
+								"123"
 							]
 						}
 					},
@@ -552,7 +552,7 @@
 							"formdata": [
 								{
 									"key": "title",
-									"value": "New Product 22",
+									"value": "New Product 22 test test",
 									"type": "text"
 								},
 								{
@@ -567,12 +567,17 @@
 								},
 								{
 									"key": "category_id",
-									"value": "6",
+									"value": "47",
 									"type": "text"
 								},
 								{
-									"key": "image_url",
+									"key": "image_url[]",
 									"value": "/storage/attachments/feWZY1lJjntZnMuaUXAONq8130cW9HhjqWp7mhUv.png",
+									"type": "text"
+								},
+								{
+									"key": "image_url[]",
+									"value": "/storage/attachments/16EUs93MTBRIcMa0EFNqJbNOEGXJ6RrRemTCQFjz.jpg",
 									"type": "text"
 								}
 							]
@@ -633,11 +638,11 @@
 								},
 								{
 									"key": "category_id",
-									"value": "6",
+									"value": "45",
 									"type": "text"
 								},
 								{
-									"key": "image_url",
+									"key": "image_url[]",
 									"value": "/storage/attachments/DwQKOfHzrSHhuFsMeGfSqN3CCPN0bR0ktISbgvwh.png",
 									"type": "text"
 								},
@@ -645,11 +650,16 @@
 									"key": "_method",
 									"value": "PUT",
 									"type": "text"
+								},
+								{
+									"key": "image_url[]",
+									"value": "/storage/attachments/pOF2nP8WUnMR7IMyHzTfv6kT74m3QESK43wHvBUi.jpg",
+									"type": "text"
 								}
 							]
 						},
 						"url": {
-							"raw": "http://localhost:8000/api/products/17",
+							"raw": "http://localhost:8000/api/products/133",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -658,7 +668,7 @@
 							"path": [
 								"api",
 								"products",
-								"17"
+								"133"
 							]
 						}
 					},
@@ -1409,7 +1419,13 @@
 								{
 									"key": "files[]",
 									"type": "file",
-									"src": "/C:/Users/omnia_salama/OneDrive - Efinance/Pictures/Screenshots/image1.png"
+									"src": [
+										"/C:/Users/omnia_salama/OneDrive - Efinance/Pictures/Screenshots/image1.png",
+										"/C:/Users/omnia_salama/Downloads/microwave.jpg",
+										"/C:/Users/omnia_salama/Downloads/food.jpg",
+										"/C:/Users/omnia_salama/Downloads/fashon.jpg",
+										"/C:/Users/omnia_salama/Downloads/electronics.jpg"
+									]
 								}
 							]
 						},
