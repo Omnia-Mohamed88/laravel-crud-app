@@ -110,17 +110,21 @@ public function register(RegisterRequest $request)
 public function login(LoginRequest $request)
 {
     $validated = $request->validated();
-
     $credentials = $request->only('email', 'password');
 
     if (!Auth::attempt($credentials)) {
-        return response()->json(['error' => ['status' => 401, 'message' => 'Unauthorized']], 401);
+        return response()->json([
+            'error' => [
+                'status' => 401,
+                'message' => 'Invalid email or password. Please check your credentials and try again.'
+            ]
+        ], 401);
     }
 
     $user = Auth::user();
     $token = $user->createToken('Personal Access Token')->accessToken;
 
-    $roles = $user->getRoleNames(); 
+    $roles = $user->getRoleNames();
 
     return response()->json([
         'token' => $token,
@@ -128,7 +132,7 @@ public function login(LoginRequest $request)
             'id' => $user->id,
             'name' => $user->name,
             'email' => $user->email,
-            'roles' => $roles, 
+            'roles' => $roles,
             'created_at' => $user->created_at,
             'updated_at' => $user->updated_at,
         ]
