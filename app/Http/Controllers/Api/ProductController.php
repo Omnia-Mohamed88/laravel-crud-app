@@ -101,39 +101,93 @@ class ProductController extends Controller
         }
     }
 
+    // public function update(UpdateProductRequest $request, $id): JsonResponse
+    // {
+    //     try {
+    //         $product = Product::findOrFail($id);
+
+    //         $data = $request->validated(); 
+
+    //         $product->update($data);
+
+    //         $oldAttachments = $product->attachments;
+    //         foreach ($oldAttachments as $attachment) {
+    //             $filePath = str_replace('storage/', '', $attachment->file_path);
+    //             Storage::disk('public')->delete($filePath);
+    //             $attachment->delete();
+    //         }
+
+    //         if ($request->image_url && is_array($request->image_url)) {
+    //             foreach ($request->image_url as $imageUrl) {
+    //                 $product->attachments()->create(['file_path' => $imageUrl]);
+    //             }
+    //         }
+
+    //         if ($request->hasFile('attachments')) {
+    //             foreach ($request->file('attachments') as $file) {
+    //                 $filePath = $file->store('attachments', 'public');
+    //                 $product->attachments()->create(['file_path' => $filePath]);
+    //             }
+    //         }
+
+    //         return response()->json([
+    //             'message' => 'Product updated successfully.',
+    //             'data' => new ProductResource($product->load('attachments'))
+    //         ], 200);
+    //     } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+    //         return response()->json([
+    //             'success' => false,
+    //             'message' => 'Product not found.'
+    //         ], 404);
+    //     } catch (\Exception $e) {
+    //         Log::error('Error updating product:', [
+    //             'message' => $e->getMessage(),
+    //             'trace' => $e->getTraceAsString()
+    //         ]);
+
+    //         return response()->json([
+    //             'success' => false,
+    //             'message' => 'Failed to update the product.',
+    //             'error' => $e->getMessage()
+    //         ], 500);
+    //     }
+    // }
     public function update(UpdateProductRequest $request, $id): JsonResponse
     {
         try {
             $product = Product::findOrFail($id);
-
-            $data = $request->validated(); 
-
+    
+            $data = $request->validated();
+    
             $product->update($data);
-
-            $oldAttachments = $product->attachments;
-            foreach ($oldAttachments as $attachment) {
-                $filePath = str_replace('storage/', '', $attachment->file_path);
-                Storage::disk('public')->delete($filePath);
-                $attachment->delete();
-            }
-
-            if ($request->image_url && is_array($request->image_url)) {
-                foreach ($request->image_url as $imageUrl) {
-                    $product->attachments()->create(['file_path' => $imageUrl]);
+    
+            if ($request->has('image_url') || $request->hasFile('attachments')) {
+                $oldAttachments = $product->attachments;
+                foreach ($oldAttachments as $attachment) {
+                    $filePath = str_replace('storage/', '', $attachment->file_path);
+                    Storage::disk('public')->delete($filePath);
+                    $attachment->delete();
+                }
+    
+                if ($request->image_url && is_array($request->image_url)) {
+                    foreach ($request->image_url as $imageUrl) {
+                        $product->attachments()->create(['file_path' => $imageUrl]);
+                    }
+                }
+    
+                if ($request->hasFile('attachments')) {
+                    foreach ($request->file('attachments') as $file) {
+                        $filePath = $file->store('attachments', 'public');
+                        $product->attachments()->create(['file_path' => $filePath]);
+                    }
                 }
             }
-
-            if ($request->hasFile('attachments')) {
-                foreach ($request->file('attachments') as $file) {
-                    $filePath = $file->store('attachments', 'public');
-                    $product->attachments()->create(['file_path' => $filePath]);
-                }
-            }
-
+    
             return response()->json([
                 'message' => 'Product updated successfully.',
                 'data' => new ProductResource($product->load('attachments'))
             ], 200);
+    
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json([
                 'success' => false,
@@ -144,7 +198,7 @@ class ProductController extends Controller
                 'message' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
-
+    
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to update the product.',
@@ -152,7 +206,7 @@ class ProductController extends Controller
             ], 500);
         }
     }
-
+    
     public function show($id): JsonResponse
     {
         try {
