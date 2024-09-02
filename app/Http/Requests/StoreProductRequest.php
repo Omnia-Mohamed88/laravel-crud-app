@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -13,23 +12,26 @@ class StoreProductRequest extends FormRequest
 
     public function rules()
     {
+        $productId = $this->route('product'); 
+    
         return [
-            'title' => 'required|string|max:255',
+            'title' => 'required|string|max:255|unique:products,title,' . $productId,
             'description' => 'nullable|string',
             'price' => 'nullable|numeric',
             'category_id' => 'nullable|exists:categories,id',
             'image_url' => 'nullable|array',  
-            'image_url.*' => 'string',  
+            'image_url.*' => 'nullable|string',  
             'attachments.*' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
         ];
     }
-
+    
     public function messages()
     {
         return [
             'title.required' => 'The title field is required.',
             'title.string' => 'The title must be a string.',
             'title.max' => 'The title may not be greater than 255 characters.',
+            'title.unique' => 'A product with this title already exists. Please choose a different title.',
             'description.string' => 'The description must be a string.',
             'price.numeric' => 'The price must be a number.',
             'category_id.exists' => 'The selected category does not exist.',

@@ -9,17 +9,17 @@ use App\Models\Product;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\ProductResource;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
         try {
-            $perPage = $request->input('per_page', 15);
-            
-            $search = $request->input('search', '');
-            $category_id = $request->input('category_id');
+            $perPage = $request->per_page ?? 15;
+            $search = $request->search ?? '';
+            $category_id = $request->category_id;
 
             $query = Product::with('attachments', 'category');
 
@@ -38,7 +38,7 @@ class ProductController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Products retrieved successfully.',
+                'message' => 'Products List',
                 'data' => ProductResource::collection($products),
                 'pagination' => [
                     'total' => $products->total(),
@@ -62,33 +62,37 @@ class ProductController extends Controller
         }
     }
 
-    public function store(StoreProductRequest $request)
+    public function store(StoreProductRequest $request): JsonResponse
     {
         try {
-            $data = $request->only(['title', 'description', 'price', 'category_id']);
+            $data = $request->validated(); 
+
             $product = Product::create($data);
-    
-            if ($request->has('image_url') && is_array($request->input('image_url'))) {
-                foreach ($request->input('image_url') as $imageUrl) {
+
+            if ($request->image_url && is_array($request->image_url)) {
+                foreach ($request->image_url as $imageUrl) {
                     $product->attachments()->create(['file_path' => $imageUrl]);
                 }
             }
-    
+
             if ($request->hasFile('attachments')) {
                 foreach ($request->file('attachments') as $file) {
                     $filePath = $file->store('attachments', 'public');
                     $product->attachments()->create(['file_path' => $filePath]);
                 }
             }
-    
-            return response()->json(new ProductResource($product), 201);
-    
+
+            return response()->json([
+                'message' => 'Product created successfully.',
+                'data' => new ProductResource($product)
+            ], 201);
+
         } catch (\Exception $e) {
             Log::error('Error storing product:', [
                 'message' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
-    
+
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to store the product.',
@@ -96,36 +100,40 @@ class ProductController extends Controller
             ], 500);
         }
     }
-    
-    public function update(UpdateProductRequest $request, $id)
+
+    public function update(UpdateProductRequest $request, $id): JsonResponse
     {
         try {
             $product = Product::findOrFail($id);
-    
-            $data = $request->only(['title', 'description', 'price', 'category_id']);
+
+            $data = $request->validated(); 
+
             $product->update($data);
-    
+
             $oldAttachments = $product->attachments;
             foreach ($oldAttachments as $attachment) {
                 $filePath = str_replace('storage/', '', $attachment->file_path);
                 Storage::disk('public')->delete($filePath);
                 $attachment->delete();
             }
-    
-            if ($request->has('image_url') && is_array($request->input('image_url'))) {
-                foreach ($request->input('image_url') as $imageUrl) {
+
+            if ($request->image_url && is_array($request->image_url)) {
+                foreach ($request->image_url as $imageUrl) {
                     $product->attachments()->create(['file_path' => $imageUrl]);
                 }
             }
-    
+
             if ($request->hasFile('attachments')) {
                 foreach ($request->file('attachments') as $file) {
                     $filePath = $file->store('attachments', 'public');
                     $product->attachments()->create(['file_path' => $filePath]);
                 }
             }
-    
-            return response()->json(new ProductResource($product->load('attachments')), 200);
+
+            return response()->json([
+                'message' => 'Product updated successfully.',
+                'data' => new ProductResource($product->load('attachments'))
+            ], 200);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json([
                 'success' => false,
@@ -136,7 +144,7 @@ class ProductController extends Controller
                 'message' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
-    
+
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to update the product.',
@@ -144,25 +152,21 @@ class ProductController extends Controller
             ], 500);
         }
     }
-    
 
-    public function show($id)
+    public function show($id): JsonResponse
     {
         try {
-            $product = Product::with('attachments', 'category')->find($id);
-
-            if (!$product) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Product not found.'
-                ], 404);
-            }
+            $product = Product::with('attachments', 'category')->findOrFail($id);
 
             return response()->json([
-                'success' => true,
                 'message' => 'Product details retrieved successfully.',
                 'data' => new ProductResource($product)
             ], 200);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Product not found.'
+            ], 404);
         } catch (\Exception $e) {
             Log::error('Error fetching product details:', [
                 'message' => $e->getMessage(),
@@ -177,18 +181,9 @@ class ProductController extends Controller
         }
     }
 
-    public function destroy($id)
+    public function destroy(Product $product): JsonResponse
     {
         try {
-            $product = Product::find($id);
-
-            if (!$product) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Product not found.'
-                ], 404);
-            }
-
             $product->attachments()->each(function ($attachment) {
                 Storage::disk('public')->delete($attachment->file_path);
                 $attachment->delete();
@@ -197,8 +192,7 @@ class ProductController extends Controller
             $product->delete();
 
             return response()->json([
-                'success' => true,
-                'message' => 'Product deleted successfully.'
+                'message' => 'Product deleted successfully.',
             ], 200);
         } catch (\Exception $e) {
             Log::error('Error deleting product:', [
