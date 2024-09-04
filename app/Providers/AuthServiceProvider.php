@@ -8,16 +8,16 @@ use Laravel\Passport\Passport;
 
 class AuthServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any authentication / authorization services.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        // No Passport::routes() here
-        Passport::ignoreRoutes(); // Optional: Disable default Passport routes
-    }
+    // /**
+    //  * Register any authentication / authorization services.
+    //  *
+    //  * @return void
+    //  */
+    // public function register()
+    // {
+    //     // No Passport::routes() here
+    //     Passport::ignoreRoutes(); // Optional: Disable default Passport routes
+    // }
 
     /**
      * Bootstrap any authentication / authorization services.
@@ -27,6 +27,6 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
-        Passport::ignoreRoutes();
+        // Passport::ignoreRoutes();
     }
 }

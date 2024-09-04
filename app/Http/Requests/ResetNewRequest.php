@@ -6,20 +6,19 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class RegisterRequest extends FormRequest
+class ResetNewRequest extends FormRequest
 {
     public function authorize()
     {
-        return true; 
+        return true;
     }
 
     public function rules()
     {
         return [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+            'token' => 'required|string|max:255|exists:emails_tokens',
             'password' => 'required|string|min:8|confirmed',
         ];
     }
-
 }
+

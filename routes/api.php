@@ -10,60 +10,37 @@ use App\Http\Controllers\Api\PermissionController;
 use App\Http\Controllers\Api\RolePermissionController;
 use App\Http\Controllers\Api\UploadController;
 
-
-// Public routes
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
-Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:api');
+
 Route::post('password/email', [AuthController::class, 'sendResetLinkEmail']);
 Route::post('password/reset', [AuthController::class, 'reset']);
-
-// Public GET routes for categories and products
+Route::post('new-password/email', [AuthController::class, 'sendResetLinkEmailNew']);
+Route::post('new-password/reset', [AuthController::class, 'resetNew']);
 
 Route::get('categories', [CategoryController::class, 'index']);
 Route::get('categories/{id}', [CategoryController::class, 'show']); 
 Route::get('products', [ProductController::class, 'index']);
 Route::get('products/{id}', [ProductController::class, 'show']); 
 
-
-Route::middleware(['auth:api', 'role:admin,superadmin'])->group(function () {
-    Route::post('categories/import', [CategoryController::class, 'import']);
-    Route::post('/upload-image', [UploadController::class, 'uploadImage']);
-    Route::post('/delete-image', [UploadController::class, 'deleteImage']);
-    Route::apiResource('categories', CategoryController::class)->except(['index', 'show']);
-    Route::apiResource('products', ProductController::class)->except(['index', 'show']);
-});
 Route::middleware('auth:api')->group(function () {
-    // Category and Product CRUD routes (accessible by admin and superadmin)
-    // Route::middleware('role:admin,superadmin')->group(function () {
-    //     Route::post('categories/import', [CategoryController::class, 'import']);
-    //     Route::apiResource('categories', CategoryController::class)->except(['index' , 'show']);
-    //     Route::apiResource('products', ProductController::class)->except(['index','show']);
+    Route::post('logout', [AuthController::class, 'logout']);
 
-    // });
-
-   
-
-    // User CRUD routes (only accessible by superadmin)
-    Route::middleware('role:superadmin')->group(function () {
-        Route::post('users/{user}/roles', [UserController::class, 'assignRoleToUser']);
-Route::apiResource('users', UserController::class);
+    Route::middleware([ 'role:admin,superadmin'])->group(function () {
+        Route::post('categories/import', [CategoryController::class, 'import']);
+        Route::post('/attachments', [UploadController::class, 'saveOnDisk']);
+        Route::post('/delete-image', [UploadController::class, 'deleteImage']);
+        Route::apiResource('categories', CategoryController::class)->except(['index', 'show']);
+        Route::apiResource('products', ProductController::class)->except(['index', 'show']);
     });
 
-    // Role routes (accessible by superadmin)
     Route::middleware('role:superadmin')->group(function () {
+        Route::post('users/{user}/roles', [UserController::class, 'assignRoleToUser']);
+        Route::apiResource('users', UserController::class);
         Route::apiResource('roles', RoleController::class);
         Route::post('roles/{role}/permissions', [RoleController::class, 'addPermission']);
         Route::delete('roles/{role}/permissions', [RoleController::class, 'removePermission']);
-    });
-
-    // Permission routes (accessible by superadmin)
-    Route::middleware('role:superadmin')->group(function () {
         Route::apiResource('permissions', PermissionController::class);
-    });
-
-    // Role-Permission Management (accessible by superadmin)
-    Route::middleware('role:superadmin')->group(function () {
         Route::post('role-permissions/assign', [RolePermissionController::class, 'assignPermissions']);
         Route::post('role-permissions/revoke', [RolePermissionController::class, 'revokePermissions']);
     });

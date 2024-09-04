@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Storage;
 
 class UploadController extends Controller
 {
-    public function uploadImage(Request $request)
+public function saveOnDisk(Request $request)
 {
     $request->validate([
         'files.*' => 'required|image|max:2048',
@@ -18,8 +18,8 @@ class UploadController extends Controller
     if ($request->hasFile('files')) {
         $files = $request->file('files');
         foreach ($files as $file) {
-            $path = $file->store('attachments', 'public');
-            $urls[] = Storage::url($path);
+            $path = $file->storeAs('public/attachments',date("Ymdhis").'-'.$file->getClientOriginalName());
+            $urls[] = config('app.url').Storage::url($path);
         }
         return response()->json(['urls' => $urls, 'count' => count($files)], 200);
     }

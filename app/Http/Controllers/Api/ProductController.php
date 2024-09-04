@@ -14,108 +14,91 @@ use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
-    public function index(Request $request): JsonResponse
+
+    public function index()
     {
-        try {
-            $perPage = $request->per_page ?? 15;
-            $search = $request->search ?? '';
-            $category_id = $request->category_id;
-
-            $query = Product::with('attachments', 'category');
-
-            if ($search) {
-                $query->where(function ($q) use ($search) {
-                    $q->where('title', 'like', "%{$search}%")
-                      ->orWhere('description', 'like', "%{$search}%");
-                });
-            }
-            
-            if ($category_id) {
-                $query->where('category_id', $category_id);
-            }
-            
-            $products = $query->paginate($perPage);
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Products List',
-                'data' => ProductResource::collection($products),
-                'pagination' => [
-                    'total' => $products->total(),
-                    'count' => $products->count(),
-                    'per_page' => $products->perPage(),
-                    'current_page' => $products->currentPage(),
-                    'total_pages' => $products->lastPage(),
-                ]
-            ], 200);
-        } catch (\Exception $e) {
-            Log::error('Error fetching products:', [
-                'message' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ]);
-
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to fetch products.',
-                'error' => $e->getMessage()
-            ], 500);
-        }
+        $filtered = $this->filterData();
+        $data = ProductResource::collection($filtered);
+        return $this->respondForResource($data,"Products List");
     }
-
+    
     public function store(StoreProductRequest $request): JsonResponse
     {
+        \DB::beginTransaction();
         try {
-            $data = $request->validated(); 
+            $product = Product::create($request->validated()); 
+            foreach($request->attachments as $attachment)
+            {
 
-            $product = Product::create($data);
-
-            if ($request->image_url && is_array($request->image_url)) {
-                foreach ($request->image_url as $imageUrl) {
-                    $product->attachments()->create(['file_path' => $imageUrl]);
-                }
+                $product->attachments()->create($attachment);
+                // $product->attachments()->create([
+                //     "file_path" => $attachment->file_path
+                // ]);
             }
-
-            if ($request->hasFile('attachments')) {
-                foreach ($request->file('attachments') as $file) {
-                    $filePath = $file->store('attachments', 'public');
-                    $product->attachments()->create(['file_path' => $filePath]);
-                }
-            }
-
-            return response()->json([
-                'message' => 'Product created successfully.',
-                'data' => new ProductResource($product)
-            ], 201);
-
+            \DB::commit();
         } catch (\Exception $e) {
-            Log::error('Error storing product:', [
-                'message' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ]);
-
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to store the product.',
-                'error' => $e->getMessage()
-            ], 500);
+            \DB::rollback();
+            info($e);
+            return $this->respondError($e->getMessage(),"Failed to store the product.");
         }
+
+        return $this->respondCreated(ProductResource::make($product),'Product created successfully.');
     }
 
-    // public function update(UpdateProductRequest $request, $id): JsonResponse
+    // public function index(Request $request): JsonResponse
     // {
     //     try {
-    //         $product = Product::findOrFail($id);
+    //         $perPage = $request->per_page ?? 15;
+    //         $search = $request->search ?? '';
+    //         $category_id = $request->category_id;
 
+    //         $query = Product::with('attachments', 'category');
+
+    //         if ($search) {
+    //             $query->where(function ($q) use ($search) {
+    //                 $q->where('title', 'like', "%{$search}%")
+    //                   ->orWhere('description', 'like', "%{$search}%");
+    //             });
+    //         }
+            
+    //         if ($category_id) {
+    //             $query->where('category_id', $category_id);
+    //         }
+            
+    //         $products = $query->paginate($perPage);
+
+    //         return response()->json([
+    //             'success' => true,
+    //             'message' => 'Products List',
+    //             'data' => ProductResource::collection($products),
+    //             'pagination' => [
+    //                 'total' => $products->total(),
+    //                 'count' => $products->count(),
+    //                 'per_page' => $products->perPage(),
+    //                 'current_page' => $products->currentPage(),
+    //                 'total_pages' => $products->lastPage(),
+    //             ]
+    //         ], 200);
+    //     } catch (\Exception $e) {
+    //         Log::error('Error fetching products:', [
+    //             'message' => $e->getMessage(),
+    //             'trace' => $e->getTraceAsString()
+    //         ]);
+
+    //         return response()->json([
+    //             'success' => false,
+    //             'message' => 'Failed to fetch products.',
+    //             'error' => $e->getMessage()
+    //         ], 500);
+    //     }
+    // }
+
+    // public function store(StoreProductRequest $request): JsonResponse
+    // {
+    //     try {
     //         $data = $request->validated(); 
 
-    //         $product->update($data);
-
-    //         $oldAttachments = $product->attachments;
-    //         foreach ($oldAttachments as $attachment) {
-    //             $filePath = str_replace('storage/', '', $attachment->file_path);
-    //             Storage::disk('public')->delete($filePath);
-    //             $attachment->delete();
-    //         }
+    //         $product = Product::create($data);
 
     //         if ($request->image_url && is_array($request->image_url)) {
     //             foreach ($request->image_url as $imageUrl) {
@@ -131,27 +114,24 @@ class ProductController extends Controller
     //         }
 
     //         return response()->json([
-    //             'message' => 'Product updated successfully.',
-    //             'data' => new ProductResource($product->load('attachments'))
-    //         ], 200);
-    //     } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-    //         return response()->json([
-    //             'success' => false,
-    //             'message' => 'Product not found.'
-    //         ], 404);
+    //             'message' => 'Product created successfully.',
+    //             'data' => new ProductResource($product)
+    //         ], 201);
+
     //     } catch (\Exception $e) {
-    //         Log::error('Error updating product:', [
+    //         Log::error('Error storing product:', [
     //             'message' => $e->getMessage(),
     //             'trace' => $e->getTraceAsString()
     //         ]);
 
     //         return response()->json([
     //             'success' => false,
-    //             'message' => 'Failed to update the product.',
+    //             'message' => 'Failed to store the product.',
     //             'error' => $e->getMessage()
     //         ], 500);
     //     }
     // }
+
     public function update(UpdateProductRequest $request, $id): JsonResponse
     {
         try {
@@ -260,5 +240,35 @@ class ProductController extends Controller
                 'error' => $e->getMessage()
             ], 500);
         }
+    }
+
+    public function filterData() {
+        $query = Product::query();
+
+        if(request()->category_id){
+            $query = $query
+            ->where("category_id",request()->category_id);
+        }
+
+        if(request()->search){
+            $query = $query->where(function($q) {
+                $q->where("title","like","%".request()->search."%")
+                ->orWhere("description","like","%".request()->search."%");
+            });
+     
+        }
+
+        if(request()->price){
+            $query = $query
+            ->where("price","<=",request()->price);
+        }
+
+        if(request()->per_page){
+         $query = $query->paginate(request()->per_page);
+        }else{
+            $query = $query->get();
+        }
+
+        return $query;
     }
 }

@@ -14,7 +14,7 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'web', // Default guard for web requests
+        'guard' => 'api', // Default guard for web requests
         'passwords' => 'users',
     ],
 
@@ -36,15 +36,15 @@ return [
     */
 
     'guards' => [
-    'web' => [
-        'driver' => 'session',
-        'provider' => 'users',
-    ],
+        'web' => [
+            'driver' => 'session',
+            'provider' => 'users',
+        ],
 
-    'api' => [
-        'driver' => 'passport',
-        'provider' => 'users',
-    ],
+        'api' => [
+            'driver' => 'passport',
+            'provider' => 'users',
+        ],
 ],
 
 
