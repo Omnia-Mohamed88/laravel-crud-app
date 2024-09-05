@@ -1,6 +1,7 @@
 <?php
 namespace App\Exceptions;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Auth\AuthenticationException;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
@@ -45,6 +46,15 @@ class Handler extends ExceptionHandler
                 return response()->json([
                     'error' => 'Route Not Found',
                     'message' => 'The route you are trying to access does not exist.'
+                ], 404);
+            }
+        }
+
+        if ($exception instanceof ModelNotFoundException) {
+            if ($request->wantsJson()) {
+                return response()->json([
+                    'error' => 'Model Not Found',
+                    'message' => 'The model you are trying to access does not exist.'
                 ], 404);
             }
         }

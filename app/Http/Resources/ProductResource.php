@@ -3,9 +3,9 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ProductResource extends JsonResource 
+class ProductResource extends JsonResource
 {
-    
+
     public function toArray($request)
     {
         return [
@@ -13,7 +13,7 @@ class ProductResource extends JsonResource
             'title' => $this->title,
             'description' => $this->description,
             'price' => $this->price,
-            'category' => new CategoryResource($this->whenLoaded('category')), 
+            'category' => new CategoryResource($this->whenLoaded('category')),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'attachments' => $this->attachments->map(function ($attachment) {
@@ -30,7 +30,7 @@ class ProductResource extends JsonResource
     private function formatFilePath($filePath)
     {
         $filePath = ltrim($filePath, '/');
-        
+
         if (str_starts_with($filePath, 'storage/')) {
             $filePath = substr($filePath, strlen('storage/'));
         }
