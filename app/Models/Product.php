@@ -15,20 +15,33 @@ class Product extends Model
     /**
      * Get the category that owns the product.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
-    
+
     /**
      * Get the attachments for the product.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     * @return MorphMany
      */
     public function attachments(): MorphMany
     {
         return $this->morphMany(Attachment::class, 'attachable');
+    }
+
+    public static function boot(): void
+    {
+        parent::boot();
+        self::created(function ($model) {
+            if(request()->has("attachments")){
+                foreach(request()->attachments as $attachment)
+                {
+                    $model->attachments()->create($attachment);
+                }
+            }
+        });
     }
 }

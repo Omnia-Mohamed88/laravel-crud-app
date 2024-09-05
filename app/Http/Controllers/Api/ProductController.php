@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Models\Product;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\FacadesDB;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\ProductResource;
 use Illuminate\Http\Request;
@@ -21,23 +23,16 @@ class ProductController extends Controller
         $data = ProductResource::collection($filtered);
         return $this->respondForResource($data,"Products List");
     }
-    
+
     public function store(StoreProductRequest $request): JsonResponse
     {
-        \DB::beginTransaction();
+        DB::beginTransaction();
         try {
-            $product = Product::create($request->validated()); 
-            foreach($request->attachments as $attachment)
-            {
+            $product = Product::create($request->validated());
 
-                $product->attachments()->create($attachment);
-                // $product->attachments()->create([
-                //     "file_path" => $attachment->file_path
-                // ]);
-            }
-            \DB::commit();
+            DB::commit();
         } catch (\Exception $e) {
-            \DB::rollback();
+            DB::rollback();
             info($e);
             return $this->respondError($e->getMessage(),"Failed to store the product.");
         }
@@ -60,11 +55,11 @@ class ProductController extends Controller
     //                   ->orWhere('description', 'like', "%{$search}%");
     //             });
     //         }
-            
+
     //         if ($category_id) {
     //             $query->where('category_id', $category_id);
     //         }
-            
+
     //         $products = $query->paginate($perPage);
 
     //         return response()->json([
@@ -96,7 +91,7 @@ class ProductController extends Controller
     // public function store(StoreProductRequest $request): JsonResponse
     // {
     //     try {
-    //         $data = $request->validated(); 
+    //         $data = $request->validated();
 
     //         $product = Product::create($data);
 
@@ -136,11 +131,11 @@ class ProductController extends Controller
     {
         try {
             $product = Product::findOrFail($id);
-    
+
             $data = $request->validated();
-    
+
             $product->update($data);
-    
+
             if ($request->has('image_url') || $request->hasFile('attachments')) {
                 $oldAttachments = $product->attachments;
                 foreach ($oldAttachments as $attachment) {
@@ -148,13 +143,13 @@ class ProductController extends Controller
                     Storage::disk('public')->delete($filePath);
                     $attachment->delete();
                 }
-    
+
                 if ($request->image_url && is_array($request->image_url)) {
                     foreach ($request->image_url as $imageUrl) {
                         $product->attachments()->create(['file_path' => $imageUrl]);
                     }
                 }
-    
+
                 if ($request->hasFile('attachments')) {
                     foreach ($request->file('attachments') as $file) {
                         $filePath = $file->store('attachments', 'public');
@@ -162,12 +157,12 @@ class ProductController extends Controller
                     }
                 }
             }
-    
+
             return response()->json([
                 'message' => 'Product updated successfully.',
                 'data' => new ProductResource($product->load('attachments'))
             ], 200);
-    
+
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json([
                 'success' => false,
@@ -178,7 +173,7 @@ class ProductController extends Controller
                 'message' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
-    
+
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to update the product.',
@@ -186,7 +181,7 @@ class ProductController extends Controller
             ], 500);
         }
     }
-    
+
     public function show($id): JsonResponse
     {
         try {
@@ -255,7 +250,7 @@ class ProductController extends Controller
                 $q->where("title","like","%".request()->search."%")
                 ->orWhere("description","like","%".request()->search."%");
             });
-     
+
         }
 
         if(request()->price){
