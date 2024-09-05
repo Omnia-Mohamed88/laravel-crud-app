@@ -26,24 +26,24 @@ class ProductController extends Controller
     {
         \DB::beginTransaction();
         try {
-            $product = Product::create($request->validated()); 
-            foreach($request->attachments as $attachment)
-            {
+            $product = Product::create($request->validated());
 
-                $product->attachments()->create($attachment);
-                // $product->attachments()->create([
-                //     "file_path" => $attachment->file_path
-                // ]);
+            if ($request->has('attachments') && is_array($request->attachments)) {
+                foreach ($request->attachments as $attachment) {
+                    $product->attachments()->create($attachment);
+                }
             }
+
             \DB::commit();
         } catch (\Exception $e) {
             \DB::rollback();
             info($e);
-            return $this->respondError($e->getMessage(),"Failed to store the product.");
+            return $this->respondError($e->getMessage(), "Failed to store the product.");
         }
 
-        return $this->respondCreated(ProductResource::make($product),'Product created successfully.');
+        return $this->respondCreated(ProductResource::make($product), 'Product created successfully.');
     }
+
 
     // public function index(Request $request): JsonResponse
     // {

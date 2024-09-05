@@ -21,7 +21,15 @@ class StoreProductRequest extends FormRequest
             'category_id' => 'nullable|exists:categories,id',
             'image_url' => 'nullable|array',  
             'image_url.*' => 'nullable|string',  
-            'attachments.*' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+            // 'attachments.*' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+'attachments.*.file_path' => [
+            'nullable',
+            function ($attribute, $value, $fail) {
+                if (!filter_var($value, FILTER_VALIDATE_URL) && !preg_match('/^http:\/\/localhost/', $value)) {
+                    $fail("The $attribute field must be a valid URL.");
+                }
+            },
+        ],
         ];
     }
     
