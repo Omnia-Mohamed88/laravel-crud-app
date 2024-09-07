@@ -11,6 +11,10 @@ use App\Http\Resources\CategoryResource;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\CategoriesImport;
 use OpenApi\Annotations as OA;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
+
+
 
 class CategoryController extends Controller
 {
@@ -70,14 +74,18 @@ class CategoryController extends Controller
      *     )
      * )
      */
-    public function index(Request $request)
-    {
-        $perPage = $request->input('per_page', 15); 
-        $categories = Category::with('attachments')->paginate($perPage);
-
-        return CategoryResource::collection($categories);
+   
+    public function index(){
+        $query = Category::query();
+        if (request()->per_page){
+            $query = $query->paginate(request()->per_page);
+        }
+        else {
+            $query = $query->get();
+        }
+        $data = CategoryResource::collection($query);
+        return $this->respondForResource($data,"Category List");
     }
-
     /**
      * @OA\Post(
      *     path="/api/categories",
@@ -123,24 +131,21 @@ class CategoryController extends Controller
      *     )
      * )
      */
-    public function store(StoreCategoryRequest $request)
+   
+
+    public function store(StoreCategoryRequest $request): JsonResponse
     {
-        $validated = $request->validated();
-
-        $category = Category::create([
-            'title' => $validated['title'],
-        ]);
-
-        if ($request->hasFile('attachments')) {
-            foreach ($request->file('attachments') as $file) {
-                $filePath = $file->store('attachments', 'public');
-                $category->attachments()->create([
-                    'file_path' => $filePath,
-                ]);
-            }
+        DB::beginTransaction();
+        try{
+            $Category = Category::create($request->validated());
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
+            info($e);
+            return $this->respondeError($e->getMessage(),"Faild to store Category");
         }
+        return $this->respondCreated(CategoryResource::make($Category),'Category created successfully.');
 
-        return response()->json($category, 201);
     }
 
     /**
@@ -180,15 +185,9 @@ class CategoryController extends Controller
      *     )
      * )
      */
-    public function show($id)
+    public function show(Category $category) : JsonResponse
     {
-        $category = Category::with('attachments')->find($id);
-
-        if (!$category) {
-            return response()->json(['message' => 'Category not found'], 404);
-        }
-
-        return new CategoryResource($category);
+        return $this->respondForResource(CategoryResource::make($category),'Category Data');
     }
 
     /**
@@ -249,36 +248,41 @@ class CategoryController extends Controller
      *     )
      * )
      */
-    public function update(StoreCategoryRequest $request, $id)
+    public function update(StoreCategoryRequest $request, Category $category): JsonResponse
     {
-        $category = Category::find($id);
-
-        if (!$category) {
-            return response()->json(['message' => 'Category not found'], 404);
-        }
-
-        $validated = $request->validated();
-
-        if ($request->has('title')) {
-            $category->update(['title' => $validated['title']]);
-        }
-
-        if ($request->hasFile('attachments')) {
-            $category->attachments()->each(function ($attachment) {
-                Storage::disk('public')->delete($attachment->file_path);
-                $attachment->delete();
-            });
-
-            foreach ($request->file('attachments') as $file) {
-                $filePath = $file->store('attachments', 'public');
-                $category->attachments()->create([
-                    'file_path' => $filePath,
-                ]);
+        DB::beginTransaction();
+        
+        try {
+            $category->update($request->validated());
+    
+            if ($request->has('attachments')) {
+                if (!empty($request->attachments["create"])) {
+                    foreach ($request->attachments["create"] as $attachment) {
+                        $category->attachments()->create($attachment);
+                    }
+                }
+    
+                if (!empty($request->attachments["delete"])) {
+                    $attachmentsToDelete = $category->attachments()->whereIn('id', $request->attachments["delete"])->get();
+                    
+                    foreach ($attachmentsToDelete as $attachment) {
+                        $filePath = str_replace(config('app.url') . '/storage/', '', $attachment->file_path);
+                        Storage::disk('public')->delete($filePath);
+                        $attachment->delete();
+                    }
+                }
             }
+    
+            DB::commit();
+    
+        } catch (\Exception $e) {
+            DB::rollback();
+            return $this->respondError($e->getMessage(), "Failed to update the category.");
         }
-
-        return response()->json($category);
+    
+        return $this->respond(CategoryResource::make($category), 'Category updated successfully.');
     }
+    
 
     /**
      * @OA\Delete(
@@ -314,22 +318,29 @@ class CategoryController extends Controller
      *     )
      * )
      */
-    public function destroy($id)
-    {
-        $category = Category::find($id);
+   public function destroy(Category $category){
+    try {
+        if ($category->attachments()->exists()){
+            $category->attachments->each(function ($attachment){
+                $filePath = str_replace(config('app.url') . '/storage/', '', $attachment->file_path);
+                    
+                Storage::disk('public')->delete($filePath);
+                
+                $attachment->delete();
+            });
 
-        if (!$category) {
-            return response()->json(['message' => 'Category not found'], 404);
         }
-
-        $category->attachments()->each(function ($attachment) {
-            Storage::disk('public')->delete($attachment->file_path);
-            $attachment->delete();
-        });
-
         $category->delete();
-        return response()->json(['message' => 'Category deleted successfully']);
+        return $this->respondSuccess("category deleted successfully.");
+
+
     }
+    catch (\Exception $e){
+        return $this->respondError($e->getMessage(), "Failed to delete the Category.");
+
+    }
+
+   }
 
     /**
      * @OA\Post(
@@ -374,7 +385,6 @@ class CategoryController extends Controller
             \Log::info('File imported successfully');
             return response()->json(['message' => 'Categories imported successfully'], 201);
         } catch (\Exception $e) {
-            // Log the error
             \Log::error('Error importing file: ' . $e->getMessage());
             return response()->json(['error' => 'Error importing file: ' . $e->getMessage()], 500);
         }

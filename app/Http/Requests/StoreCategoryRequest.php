@@ -25,7 +25,9 @@ class StoreCategoryRequest extends FormRequest
     {
         return [
             'title' => 'required|string|max:255',
-            'attachments.*.file' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            // 'attachments.*.file' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'attachments.*.file_path' => 'nullable',
+
         ];
     }
 

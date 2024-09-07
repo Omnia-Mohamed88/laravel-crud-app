@@ -11,6 +11,14 @@ class Category extends Model
     use HasFactory;
     
     protected $fillable = ['title'];
+    protected $appends = ["attachments_data"];
+
+    protected function attachmentsData(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->attachments()?->get(),
+        );
+    }
 
     /**
      * Get the products for the category.
@@ -30,6 +38,18 @@ class Category extends Model
     public function attachments(): MorphMany
     {
         return $this->morphMany(Attachment::class, 'attachable');
+    }
+    public static function boot(): void
+    {
+        parent::boot();
+        self::created(function ($model) {
+            if(request()->has("attachments")){
+                foreach(request()->attachments as $attachment)
+                {
+                    $model->attachments()->create($attachment);
+                }
+            }
+        });
     }
 }
 
