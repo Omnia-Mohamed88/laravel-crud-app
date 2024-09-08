@@ -37,7 +37,7 @@ class ProductController extends Controller
         return $this->respondCreated(ProductResource::make($product),'Product created successfully.');
     }
 
-    public function update(UpdateProductRequest $request, Product $product): JsonResponse
+    public function update(UpdateProductRequest $request, Product $product): JsonResponse //modle binding
     {
         try {
             $product->update($request->validated());

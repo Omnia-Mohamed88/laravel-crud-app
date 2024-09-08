@@ -1,80 +1,71 @@
 <?php
-namespace App\Http\Controllers\Api;
-use App\Http\Controllers\Controller; 
 
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePermissionRequest;
+use App\Http\Requests\UpdatePermissionRequest;
 use Spatie\Permission\Models\Permission;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class PermissionController extends Controller
 {
-    public function index()
+    public function index() : JsonResponse
     {
-        return response()->json(Permission::all());
-    }
-
-    public function store(StorePermissionRequest $request)
-    {
-        try {
-            $permission = Permission::create(['name' => $request->name]);
-
-            return response()->json([
-                'success' => true,
-                'data' => $permission
-            ], 201);
-
-        } catch (\Exception $e) {
-            Log::error('Error creating permission: ' . $e->getMessage());
-
-            return response()->json([
-                'success' => false,
-                'message' => 'An error occurred',
-                'error' => $e->getMessage()
-            ], 500);
+        $query = Permission::query();
+        if (request()->per_page) {
+            $query = $query->paginate(request()->per_page);
+        } else {
+            $query = $query->get();
         }
+        return $this->respond($query, "Permission List");
     }
 
-    public function show(Permission $permission)
+    public function store(StorePermissionRequest $request) : JsonResponse
     {
-        return response()->json($permission);
-    }
-
-    public function update(StorePermissionRequest $request, Permission $permission)
-    {
+        DB::beginTransaction();
         try {
             $validated = $request->validated();
-
-            $permission->update(['name' => $validated['name']]);
-
-            return response()->json($permission);
-
+            $permission = Permission::create($validated); 
+            DB::commit();
+            return $this->respondCreated($permission, 'Permission created successfully.');
         } catch (\Exception $e) {
-            Log::error('Error updating permission: ' . $e->getMessage());
-
-            return response()->json([
-                'success' => false,
-                'message' => 'An error occurred',
-                'error' => $e->getMessage()
-            ], 500);
+            DB::rollback();
+            return $this->respondError($e->getMessage(), "Failed to store Permission");
         }
     }
 
-    public function destroy(Permission $permission)
+    public function show(Permission $permission) : JsonResponse
     {
+        return $this->respond($permission, 'Permission Data');
+    }
+
+    public function update(UpdatePermissionRequest $request, Permission $permission) : JsonResponse
+    {
+        DB::beginTransaction();
+        try {
+            $validated = $request->validated();
+            $permission->update($validated); 
+            DB::commit();
+            return $this->respondCreated($permission, 'Permission updated successfully.');
+        } catch (\Exception $e) {
+            DB::rollback();
+            return $this->respondError($e->getMessage(), "Failed to update Permission");
+        }
+    }
+
+    public function destroy(Permission $permission) : JsonResponse
+    {
+        DB::beginTransaction();
         try {
             $permission->delete();
-
-            return response()->json(['message' => 'Permission deleted']);
-
+            DB::commit();
+            return $this->respondSuccess("Permission deleted successfully.");
         } catch (\Exception $e) {
-            Log::error('Error deleting permission: ' . $e->getMessage());
-
-            return response()->json([
-                'success' => false,
-                'message' => 'An error occurred',
-                'error' => $e->getMessage()
-            ], 500);
+            DB::rollback();
+            return $this->respondError($e->getMessage(), "Failed to delete the Permission.");
         }
     }
 }

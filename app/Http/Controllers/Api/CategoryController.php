@@ -142,7 +142,7 @@ class CategoryController extends Controller
         } catch (\Exception $e) {
             DB::rollback();
             info($e);
-            return $this->respondeError($e->getMessage(),"Faild to store Category");
+            return $this->respondError($e->getMessage(),"Faild to store Category");
         }
         return $this->respondCreated(CategoryResource::make($Category),'Category created successfully.');
 

@@ -51,16 +51,5 @@ public function deleteImage(Request $request)
 
 
 }
-//     public function uploadImage(Request $request)
-// {
-//     $request->validate([
-//         'file' => 'required|image|max:2048',
-//     ]);
-
-//     $path = $request->file('file')->store('attachments', 'public');
-//     $url = url(Storage::url($path)); // Use url() to get the full URL
-
-//     return response()->json(['url' => $url], 200);
-// }
 
 
