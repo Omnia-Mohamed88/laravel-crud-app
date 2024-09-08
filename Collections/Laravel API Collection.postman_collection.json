@@ -8,7 +8,7 @@
 	},
 	"item": [
 		{
-			"name": "Auth Routes",
+			"name": "Auth",
 			"item": [
 				{
 					"name": "Register",
@@ -23,7 +23,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"name\": \"user\",\n  \"email\": \"user@example.com\",\n  \"password\": \"password\",\n   \"password_confirmation\":\"password\"\n\n}",
+							"raw": "{\n    \"name\": \"client\",\n    \"email\": \"client@example.com\",\n    \"password\": \"password\",\n    \"password_confirmation\": \"password\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -31,14 +31,11 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8000/api/register",
-							"protocol": "http",
+							"raw": "{{base_url}}/register",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "8000",
 							"path": [
-								"api",
 								"register"
 							]
 						}
@@ -58,7 +55,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"password\"\n}",
+							"raw": "{\n  \"email\": \"superadmin@example.com\",\n  \"password\": \"superadminpassword\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -66,14 +63,11 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8000/api/login",
-							"protocol": "http",
+							"raw": "{{base_url}}/login",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "8000",
 							"path": [
-								"api",
 								"login"
 							]
 						}
@@ -187,6 +181,72 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Send Password Reset Link Copy",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"moni.salama88@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/new-password/email",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"new-password",
+								"email"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reset Password Copy",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"password\": \"newpassword\",\n  \"password_confirmation\": \"newpassword\",\n  \"token\": \"8903KGLoEjzaXm\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/new-password/reset",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"new-password",
+								"reset"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -231,7 +291,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8000/api/categories/1",
+							"raw": "http://localhost:8000/api/categories/5",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -240,7 +300,7 @@
 							"path": [
 								"api",
 								"categories",
-								"1"
+								"5"
 							]
 						}
 					},
@@ -254,7 +314,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiOTk5OGNiNTdmNTBiMzE1ZDQ3MDMxNDI0OGNmMTYzNmRjZDM0MDgyNTNhNGJmMzY1NjE1MzFiNGE1ZjFkYWNkMDA0MGNkOWRmMmM3YmE1YjkiLCJpYXQiOjE3MjMzNTkzNDQuMzU2MDU1LCJuYmYiOjE3MjMzNTkzNDQuMzU2MDY0LCJleHAiOjE3NTQ4OTUzNDQuMzA2NzU2LCJzdWIiOiI3Iiwic2NvcGVzIjpbXX0.Zdo-UVE6mA79OTK-XqJTPPtqhkmPif0wgSAFs13tfCUNYSs7OFOFjdI00deJHnRYWlD5KBN-g1iuRgDWM55lzDBsLzJomr3Yw5Pw2Gl3sWo-MHufnETL348XgWuFsMMcsEI62Fun-9E-Fc2BTnh8rYu6se4GptwlRSiiWKa191hKtyG6FTZYjLi4eM7g0JYgSevM6SdMwkRdf7adFi3ZpgDJR0DHLAxsJ8j8XUGe-7qCIm-3zHLCbArkE1UQ59w5i2o-ybQ8_pqK464TL08dQh5zH1ZA6-lIDDseJGoO1-38Cmekh65fI2eZ4dXc8CUsn4gE2EmlvI9C9sFqFGo6vfaDENj91j5yl3Nzq4q8aM04SusBIEr0kYtW3kTuWhcKJZYG3qV7341zBUYwaZW2hN9UU3I41CTn94CYDWX_zZ7nOUnnq__dTQuFKvVuSZz0ymSy4KryPJehf4JwrnPuQqv7VF8edGZZN9UhXLz2NTarurAQwE2gddp1DLnQKqRHpHt70Nb3dm09u0ayxHkYMkJgVoQlhGXfsmwvizL86fhaQjHsRUa45Te8TI5sxTGZ1zTcYqC4MBqzwjVzuNsXz7tZzn2oX0OJprW3Qvrsgw8C3x54CJREISBc3r4Mzi9T8gbIw9YKf2O4Hj0bdk4zUDN_rvsx0kjR2rsYQpt2yJQ",
+									"value": "{{access_token}}",
 									"type": "string"
 								}
 							]
@@ -268,19 +328,13 @@
 							}
 						],
 						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "title",
-									"value": "New Category ",
-									"type": "text"
-								},
-								{
-									"key": "attachments[]",
-									"type": "file",
-									"src": "/C:/Users/omnia_salama/OneDrive - Efinance/Pictures/Screenshots/image1.png"
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Sample Products testtt34\",\r\n    \"attachments\": [\r\n        {\r\n            \"file_path\": \"http://localhost:8000/storage/attachments/20240907075652-electronics.jpg\"\r\n    \r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
 								}
-							]
+							}
 						},
 						"url": {
 							"raw": "http://localhost:8000/api/categories",
@@ -305,12 +359,12 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiOTk5OGNiNTdmNTBiMzE1ZDQ3MDMxNDI0OGNmMTYzNmRjZDM0MDgyNTNhNGJmMzY1NjE1MzFiNGE1ZjFkYWNkMDA0MGNkOWRmMmM3YmE1YjkiLCJpYXQiOjE3MjMzNTkzNDQuMzU2MDU1LCJuYmYiOjE3MjMzNTkzNDQuMzU2MDY0LCJleHAiOjE3NTQ4OTUzNDQuMzA2NzU2LCJzdWIiOiI3Iiwic2NvcGVzIjpbXX0.Zdo-UVE6mA79OTK-XqJTPPtqhkmPif0wgSAFs13tfCUNYSs7OFOFjdI00deJHnRYWlD5KBN-g1iuRgDWM55lzDBsLzJomr3Yw5Pw2Gl3sWo-MHufnETL348XgWuFsMMcsEI62Fun-9E-Fc2BTnh8rYu6se4GptwlRSiiWKa191hKtyG6FTZYjLi4eM7g0JYgSevM6SdMwkRdf7adFi3ZpgDJR0DHLAxsJ8j8XUGe-7qCIm-3zHLCbArkE1UQ59w5i2o-ybQ8_pqK464TL08dQh5zH1ZA6-lIDDseJGoO1-38Cmekh65fI2eZ4dXc8CUsn4gE2EmlvI9C9sFqFGo6vfaDENj91j5yl3Nzq4q8aM04SusBIEr0kYtW3kTuWhcKJZYG3qV7341zBUYwaZW2hN9UU3I41CTn94CYDWX_zZ7nOUnnq__dTQuFKvVuSZz0ymSy4KryPJehf4JwrnPuQqv7VF8edGZZN9UhXLz2NTarurAQwE2gddp1DLnQKqRHpHt70Nb3dm09u0ayxHkYMkJgVoQlhGXfsmwvizL86fhaQjHsRUa45Te8TI5sxTGZ1zTcYqC4MBqzwjVzuNsXz7tZzn2oX0OJprW3Qvrsgw8C3x54CJREISBc3r4Mzi9T8gbIw9YKf2O4Hj0bdk4zUDN_rvsx0kjR2rsYQpt2yJQ",
+									"value": "{{access_token}}",
 									"type": "string"
 								}
 							]
 						},
-						"method": "POST",
+						"method": "PUT",
 						"header": [
 							{
 								"key": "Accept",
@@ -319,27 +373,16 @@
 							}
 						],
 						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "title",
-									"value": "updated category ",
-									"type": "text"
-								},
-								{
-									"key": "attachements[]",
-									"type": "file",
-									"src": "/C:/Users/omnia_salama/OneDrive - Efinance/Pictures/Screenshots/image1.png"
-								},
-								{
-									"key": "_method",
-									"value": "PUT",
-									"type": "text"
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Updated Product\",\r\n    \"description\": \"This is a sample updated product.\",\r\n    \"price\": 199.99,\r\n    \"category_id\": 1,\r\n    \"attachments\": {\r\n        \"create\": [\r\n            {\r\n                \"file_path\": \"http://localhost:8000/storage/attachments/20240907083903-skincarecategory.jpg\"\r\n            }\r\n        ],\r\n        \"delete\": [41]\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
 								}
-							]
+							}
 						},
 						"url": {
-							"raw": "http://localhost:8000/api/categories/5",
+							"raw": "http://localhost:8000/api/categories/4",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -348,7 +391,7 @@
 							"path": [
 								"api",
 								"categories",
-								"5"
+								"4"
 							]
 						}
 					},
@@ -362,7 +405,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiOTk5OGNiNTdmNTBiMzE1ZDQ3MDMxNDI0OGNmMTYzNmRjZDM0MDgyNTNhNGJmMzY1NjE1MzFiNGE1ZjFkYWNkMDA0MGNkOWRmMmM3YmE1YjkiLCJpYXQiOjE3MjMzNTkzNDQuMzU2MDU1LCJuYmYiOjE3MjMzNTkzNDQuMzU2MDY0LCJleHAiOjE3NTQ4OTUzNDQuMzA2NzU2LCJzdWIiOiI3Iiwic2NvcGVzIjpbXX0.Zdo-UVE6mA79OTK-XqJTPPtqhkmPif0wgSAFs13tfCUNYSs7OFOFjdI00deJHnRYWlD5KBN-g1iuRgDWM55lzDBsLzJomr3Yw5Pw2Gl3sWo-MHufnETL348XgWuFsMMcsEI62Fun-9E-Fc2BTnh8rYu6se4GptwlRSiiWKa191hKtyG6FTZYjLi4eM7g0JYgSevM6SdMwkRdf7adFi3ZpgDJR0DHLAxsJ8j8XUGe-7qCIm-3zHLCbArkE1UQ59w5i2o-ybQ8_pqK464TL08dQh5zH1ZA6-lIDDseJGoO1-38Cmekh65fI2eZ4dXc8CUsn4gE2EmlvI9C9sFqFGo6vfaDENj91j5yl3Nzq4q8aM04SusBIEr0kYtW3kTuWhcKJZYG3qV7341zBUYwaZW2hN9UU3I41CTn94CYDWX_zZ7nOUnnq__dTQuFKvVuSZz0ymSy4KryPJehf4JwrnPuQqv7VF8edGZZN9UhXLz2NTarurAQwE2gddp1DLnQKqRHpHt70Nb3dm09u0ayxHkYMkJgVoQlhGXfsmwvizL86fhaQjHsRUa45Te8TI5sxTGZ1zTcYqC4MBqzwjVzuNsXz7tZzn2oX0OJprW3Qvrsgw8C3x54CJREISBc3r4Mzi9T8gbIw9YKf2O4Hj0bdk4zUDN_rvsx0kjR2rsYQpt2yJQ",
+									"value": "{{access_token}}",
 									"type": "string"
 								}
 							]
@@ -376,7 +419,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8000/api/categories/5",
+							"raw": "http://localhost:8000/api/categories/4",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -385,7 +428,7 @@
 							"path": [
 								"api",
 								"categories",
-								"5"
+								"4"
 							]
 						}
 					},
@@ -485,15 +528,29 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8000/api/products",
-							"protocol": "http",
+							"raw": "{{base_url}}/products",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "8000",
 							"path": [
-								"api",
 								"products"
+							],
+							"query": [
+								{
+									"key": "per_page",
+									"value": "20",
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": "Testwwww",
+									"disabled": true
+								},
+								{
+									"key": "category_id",
+									"value": "1",
+									"disabled": true
+								}
 							]
 						}
 					},
@@ -534,7 +591,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiYjVlMWVkYWVjYjU1MjhhYmE1MTcyNGI1YzAxOTQzZWU5MDhmOWMxOWIyYzUxOWNhNjhkOGJmZjEzOGIzYmM1ZmRkZThlOGM4MmI5NGM4MzMiLCJpYXQiOjE3MjQ2NjMzNTMuODEyMzY1LCJuYmYiOjE3MjQ2NjMzNTMuODEyMzcxLCJleHAiOjE3NTYxOTkzNTMuNTkyMjQyLCJzdWIiOiIyMCIsInNjb3BlcyI6W119.IrEaDLnivCb8ioLMyVE8lWkYHtX8v0HHodQt2448dnJgigwsG6K6lrP43KDovqhkIVyuxHbZJw7PPslx-3kz5LT4CD3sRGSxtsm9FwFDcNbYNSpvTpsJJx-gRmlUF5N_co7VZMptQMahKU_hyVRuUd0Uwfz5iJSDkPKHZuY9I7mjYLpe-PNS1Vy2u13HTqKdfL8MtgghoEDUW4Qdfosr7fKF8HBMT5mgzhrgcRtG7nRG0qzolOXlvWRfgLJXhIMqIqBld-TMUQFTtaPM0tz7Huk9W09YMoYSHzB2eennL67fFw05HzFqDmysu1bKveZbhaUjOQr6zBxtMgLRlLyTdhDEu40dt3N9rDkjUfdqrPHcH52CVezI-10X4TZdqkTnFIP7UQ_SA6RJCj1wjWTSo39kOxRvZRgC2_DBkrpnwRnnI707sGeFG2a7ec6OQkPmEUacZyxRJtG0SjXcSev1KEdBjdSXnWa_J05jU3ICm_vN_lT7gH4X9sfui1CFGtXJpU1vThOa6VK8C7rTYQKzr_hMu2wBrBuYJB09WZyAG3hw3D3WVWZ70uURN4MpzeFFTXIFK3_ezuMCa7gAStTykRkdXTE56OpE-1A8C05pjr52XEqf_G4B6zoT-mOJJ-UnpYUAvCpEFQZTsIY3vGAHjvGY621Izpi3tJnQXa1a83A",
+									"value": "{{access_token}}",
 									"type": "string"
 								}
 							]
@@ -548,49 +605,20 @@
 							}
 						],
 						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "title",
-									"value": "New Product 22 test test",
-									"type": "text"
-								},
-								{
-									"key": "description",
-									"value": "Product Description",
-									"type": "text"
-								},
-								{
-									"key": "price",
-									"value": "200",
-									"type": "text"
-								},
-								{
-									"key": "category_id",
-									"value": "47",
-									"type": "text"
-								},
-								{
-									"key": "image_url[]",
-									"value": "/storage/attachments/feWZY1lJjntZnMuaUXAONq8130cW9HhjqWp7mhUv.png",
-									"type": "text"
-								},
-								{
-									"key": "image_url[]",
-									"value": "/storage/attachments/16EUs93MTBRIcMa0EFNqJbNOEGXJ6RrRemTCQFjz.jpg",
-									"type": "text"
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Sample Products testtt34\",\r\n    \"description\": \"This is a sample product.\",\r\n    \"price\": 99.99,\r\n    \"category_id\": 1,\r\n    \"attachments\": [\r\n        {\r\n            \"file_path\": \"http://localhost:8000/storage/attachments/20240905025442-fashon.jpg\"\r\n    \r\n        }\r\n    ]\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
 								}
-							]
+							}
 						},
 						"url": {
-							"raw": "http://localhost:8000/api/products",
-							"protocol": "http",
+							"raw": "{{base_url}}/products",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "8000",
 							"path": [
-								"api",
 								"products"
 							]
 						}
@@ -605,12 +633,12 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiOTk5OGNiNTdmNTBiMzE1ZDQ3MDMxNDI0OGNmMTYzNmRjZDM0MDgyNTNhNGJmMzY1NjE1MzFiNGE1ZjFkYWNkMDA0MGNkOWRmMmM3YmE1YjkiLCJpYXQiOjE3MjMzNTkzNDQuMzU2MDU1LCJuYmYiOjE3MjMzNTkzNDQuMzU2MDY0LCJleHAiOjE3NTQ4OTUzNDQuMzA2NzU2LCJzdWIiOiI3Iiwic2NvcGVzIjpbXX0.Zdo-UVE6mA79OTK-XqJTPPtqhkmPif0wgSAFs13tfCUNYSs7OFOFjdI00deJHnRYWlD5KBN-g1iuRgDWM55lzDBsLzJomr3Yw5Pw2Gl3sWo-MHufnETL348XgWuFsMMcsEI62Fun-9E-Fc2BTnh8rYu6se4GptwlRSiiWKa191hKtyG6FTZYjLi4eM7g0JYgSevM6SdMwkRdf7adFi3ZpgDJR0DHLAxsJ8j8XUGe-7qCIm-3zHLCbArkE1UQ59w5i2o-ybQ8_pqK464TL08dQh5zH1ZA6-lIDDseJGoO1-38Cmekh65fI2eZ4dXc8CUsn4gE2EmlvI9C9sFqFGo6vfaDENj91j5yl3Nzq4q8aM04SusBIEr0kYtW3kTuWhcKJZYG3qV7341zBUYwaZW2hN9UU3I41CTn94CYDWX_zZ7nOUnnq__dTQuFKvVuSZz0ymSy4KryPJehf4JwrnPuQqv7VF8edGZZN9UhXLz2NTarurAQwE2gddp1DLnQKqRHpHt70Nb3dm09u0ayxHkYMkJgVoQlhGXfsmwvizL86fhaQjHsRUa45Te8TI5sxTGZ1zTcYqC4MBqzwjVzuNsXz7tZzn2oX0OJprW3Qvrsgw8C3x54CJREISBc3r4Mzi9T8gbIw9YKf2O4Hj0bdk4zUDN_rvsx0kjR2rsYQpt2yJQ",
+									"value": "{{access_token}}",
 									"type": "string"
 								}
 							]
 						},
-						"method": "POST",
+						"method": "PUT",
 						"header": [
 							{
 								"key": "Accept",
@@ -619,56 +647,22 @@
 							}
 						],
 						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "title",
-									"value": "update product2",
-									"type": "text"
-								},
-								{
-									"key": "description ",
-									"value": "this is description for product",
-									"type": "text"
-								},
-								{
-									"key": "price",
-									"value": "2999",
-									"type": "text"
-								},
-								{
-									"key": "category_id",
-									"value": "45",
-									"type": "text"
-								},
-								{
-									"key": "image_url[]",
-									"value": "/storage/attachments/DwQKOfHzrSHhuFsMeGfSqN3CCPN0bR0ktISbgvwh.png",
-									"type": "text"
-								},
-								{
-									"key": "_method",
-									"value": "PUT",
-									"type": "text"
-								},
-								{
-									"key": "image_url[]",
-									"value": "/storage/attachments/pOF2nP8WUnMR7IMyHzTfv6kT74m3QESK43wHvBUi.jpg",
-									"type": "text"
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Updated Product\",\r\n    \"description\": \"This is a sample updated product.\",\r\n    \"price\": 199.99,\r\n    \"category_id\": 1,\r\n    \"attachments\": {\r\n        \"create\": [\r\n            {\r\n                \"file_path\": \"http://localhost:8000/storage/attachments/20240905025625-microwave.jpg\"\r\n            }\r\n        ],\r\n        \"delete\": [31]\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
 								}
-							]
+							}
 						},
 						"url": {
-							"raw": "http://localhost:8000/api/products/133",
-							"protocol": "http",
+							"raw": "{{base_url}}/products/28",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "8000",
 							"path": [
-								"api",
 								"products",
-								"133"
+								"28"
 							]
 						}
 					},
@@ -682,7 +676,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiOTk5OGNiNTdmNTBiMzE1ZDQ3MDMxNDI0OGNmMTYzNmRjZDM0MDgyNTNhNGJmMzY1NjE1MzFiNGE1ZjFkYWNkMDA0MGNkOWRmMmM3YmE1YjkiLCJpYXQiOjE3MjMzNTkzNDQuMzU2MDU1LCJuYmYiOjE3MjMzNTkzNDQuMzU2MDY0LCJleHAiOjE3NTQ4OTUzNDQuMzA2NzU2LCJzdWIiOiI3Iiwic2NvcGVzIjpbXX0.Zdo-UVE6mA79OTK-XqJTPPtqhkmPif0wgSAFs13tfCUNYSs7OFOFjdI00deJHnRYWlD5KBN-g1iuRgDWM55lzDBsLzJomr3Yw5Pw2Gl3sWo-MHufnETL348XgWuFsMMcsEI62Fun-9E-Fc2BTnh8rYu6se4GptwlRSiiWKa191hKtyG6FTZYjLi4eM7g0JYgSevM6SdMwkRdf7adFi3ZpgDJR0DHLAxsJ8j8XUGe-7qCIm-3zHLCbArkE1UQ59w5i2o-ybQ8_pqK464TL08dQh5zH1ZA6-lIDDseJGoO1-38Cmekh65fI2eZ4dXc8CUsn4gE2EmlvI9C9sFqFGo6vfaDENj91j5yl3Nzq4q8aM04SusBIEr0kYtW3kTuWhcKJZYG3qV7341zBUYwaZW2hN9UU3I41CTn94CYDWX_zZ7nOUnnq__dTQuFKvVuSZz0ymSy4KryPJehf4JwrnPuQqv7VF8edGZZN9UhXLz2NTarurAQwE2gddp1DLnQKqRHpHt70Nb3dm09u0ayxHkYMkJgVoQlhGXfsmwvizL86fhaQjHsRUa45Te8TI5sxTGZ1zTcYqC4MBqzwjVzuNsXz7tZzn2oX0OJprW3Qvrsgw8C3x54CJREISBc3r4Mzi9T8gbIw9YKf2O4Hj0bdk4zUDN_rvsx0kjR2rsYQpt2yJQ",
+									"value": "{{access_token}}",
 									"type": "string"
 								}
 							]
@@ -696,7 +690,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8000/api/products/2",
+							"raw": "http://localhost:8000/api/products/23",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -705,7 +699,7 @@
 							"path": [
 								"api",
 								"products",
-								"2"
+								"23"
 							]
 						}
 					},
@@ -1350,7 +1344,7 @@
 			]
 		},
 		{
-			"name": "images",
+			"name": "Attachments",
 			"item": [
 				{
 					"name": "delete image",
@@ -1399,46 +1393,48 @@
 					"response": []
 				},
 				{
-					"name": "upload-image",
+					"name": "Upload File",
 					"request": {
 						"auth": {
 							"type": "bearer",
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiYjVlMWVkYWVjYjU1MjhhYmE1MTcyNGI1YzAxOTQzZWU5MDhmOWMxOWIyYzUxOWNhNjhkOGJmZjEzOGIzYmM1ZmRkZThlOGM4MmI5NGM4MzMiLCJpYXQiOjE3MjQ2NjMzNTMuODEyMzY1LCJuYmYiOjE3MjQ2NjMzNTMuODEyMzcxLCJleHAiOjE3NTYxOTkzNTMuNTkyMjQyLCJzdWIiOiIyMCIsInNjb3BlcyI6W119.IrEaDLnivCb8ioLMyVE8lWkYHtX8v0HHodQt2448dnJgigwsG6K6lrP43KDovqhkIVyuxHbZJw7PPslx-3kz5LT4CD3sRGSxtsm9FwFDcNbYNSpvTpsJJx-gRmlUF5N_co7VZMptQMahKU_hyVRuUd0Uwfz5iJSDkPKHZuY9I7mjYLpe-PNS1Vy2u13HTqKdfL8MtgghoEDUW4Qdfosr7fKF8HBMT5mgzhrgcRtG7nRG0qzolOXlvWRfgLJXhIMqIqBld-TMUQFTtaPM0tz7Huk9W09YMoYSHzB2eennL67fFw05HzFqDmysu1bKveZbhaUjOQr6zBxtMgLRlLyTdhDEu40dt3N9rDkjUfdqrPHcH52CVezI-10X4TZdqkTnFIP7UQ_SA6RJCj1wjWTSo39kOxRvZRgC2_DBkrpnwRnnI707sGeFG2a7ec6OQkPmEUacZyxRJtG0SjXcSev1KEdBjdSXnWa_J05jU3ICm_vN_lT7gH4X9sfui1CFGtXJpU1vThOa6VK8C7rTYQKzr_hMu2wBrBuYJB09WZyAG3hw3D3WVWZ70uURN4MpzeFFTXIFK3_ezuMCa7gAStTykRkdXTE56OpE-1A8C05pjr52XEqf_G4B6zoT-mOJJ-UnpYUAvCpEFQZTsIY3vGAHjvGY621Izpi3tJnQXa1a83A",
+									"value": "{{access_token}}",
 									"type": "string"
 								}
 							]
 						},
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "multipart/form-data",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
 						"body": {
 							"mode": "formdata",
 							"formdata": [
 								{
-									"key": "files[]",
+									"key": "files[0]",
 									"type": "file",
-									"src": [
-										"/C:/Users/omnia_salama/OneDrive - Efinance/Pictures/Screenshots/image1.png",
-										"/C:/Users/omnia_salama/Downloads/microwave.jpg",
-										"/C:/Users/omnia_salama/Downloads/food.jpg",
-										"/C:/Users/omnia_salama/Downloads/fashon.jpg",
-										"/C:/Users/omnia_salama/Downloads/electronics.jpg"
-									]
+									"src": "/C:/Users/omnia_salama/Downloads/skincarecategory.jpg"
 								}
 							]
 						},
 						"url": {
-							"raw": "http://localhost:8000/api/upload-image",
-							"protocol": "http",
+							"raw": "{{base_url}}/attachments",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "8000",
 							"path": [
-								"api",
-								"upload-image"
+								"attachments"
 							]
 						}
 					},
