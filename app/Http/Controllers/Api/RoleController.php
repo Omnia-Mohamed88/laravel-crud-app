@@ -2,7 +2,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request; 
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreRoleRequest;
 use App\Http\Requests\UpdateRoleRequest;
 use Spatie\Permission\Models\Role;
@@ -25,15 +25,7 @@ class RoleController extends Controller
 
     public function store(StoreRoleRequest $request) : JsonResponse
     {
-        DB::beginTransaction();
-        try {
-            $validated = $request->validated();
-            $role = Role::create($validated);
-            DB::commit();
-        } catch (\Exception $e) {
-            DB::rollback();
-            return $this->respondError($e->getMessage(), "Failed to store Role");
-        }
+        $role = Role::create($request->validated());
         return $this->respondCreated($role, 'Role created successfully.');
     }
 
@@ -44,30 +36,15 @@ class RoleController extends Controller
 
     public function update(UpdateRoleRequest $request, Role $role) : JsonResponse
     {
-        DB::beginTransaction();
-        try {
-            $validated = $request->validated();
-            $role->update($validated);
-            DB::commit();
-        } catch (\Exception $e) {
-            DB::rollback();
-            return $this->respondError($e->getMessage(), "Failed to update Role");
-        }
+        $role->update($request->validated());
         return $this->respondCreated($role, 'Role updated successfully.');
     }
-    
+
 
     public function destroy(Role $role) : JsonResponse
     {
-        DB::beginTransaction();
-        try {
-            $role->delete();
-            DB::commit();
-            return $this->respondSuccess("Role deleted successfully.");
-        } catch (\Exception $e) {
-            DB::rollback();
-            return $this->respondError($e->getMessage(), "Failed to delete the Role.");
-        }
+        $role->delete();
+        return $this->respondSuccess("Role deleted successfully.");
     }
 
     public function addPermission(Request $request, Role $role) : JsonResponse
