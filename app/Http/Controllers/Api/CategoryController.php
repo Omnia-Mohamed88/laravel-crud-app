@@ -77,6 +77,11 @@ class CategoryController extends Controller
    
     public function index(){
         $query = Category::query();
+
+        if (request()->has('title')) {
+            $query->title(request()->get('title')); 
+        }
+    
         if (request()->per_page){
             $query = $query->paginate(request()->per_page);
         }
@@ -264,7 +269,6 @@ class CategoryController extends Controller
     
                 if (!empty($request->attachments["delete"])) {
                     $attachmentsToDelete = $category->attachments()->whereIn('id', $request->attachments["delete"])->get();
-                    
                     foreach ($attachmentsToDelete as $attachment) {
                         $filePath = str_replace(config('app.url') . '/storage/', '', $attachment->file_path);
                         Storage::disk('public')->delete($filePath);
