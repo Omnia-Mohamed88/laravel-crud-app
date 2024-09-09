@@ -55,7 +55,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"email\": \"superadmin@example.com\",\n  \"password\": \"superadminpassword\"\n}",
+							"raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"adminpassword\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -82,7 +82,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiODkwZDJmNDRkNDRjNTg4MTNiYzNlNTcxY2UzYTYwMjJlODY0YjU4OTM2ZDk1Nzk0YjkwZTljNTM4ZWQ4Y2UxYzkxNzYwNmFiODBhMDc1OGUiLCJpYXQiOjE3MjMzNTkwMDUuMDEwNzUyLCJuYmYiOjE3MjMzNTkwMDUuMDEwNzYxLCJleHAiOjE3NTQ4OTUwMDQuOTQ2MzQ2LCJzdWIiOiI3Iiwic2NvcGVzIjpbXX0.JYeugYrJ9hNOq8EKwwEHAxZ_zoHsAA9pnsWEAHBm2bCC4y3KV7kPQDTgdCSviWyuWP45S17Ysl56YNQNVXC_R161KZn-ldLuPiLnuMvq-StuE9PlJI9XSWeTfkYnJUIz7wQLDqxA5VUYqanXxzGl0sO6W7TkYnBFYdBBcShtH9uuNqSawxeTPoMCO43-IrtOdSwn62No0eVPMAqPp2Q4jE7ABE20lVs1P5p6Q4M1t3M4Ov2QnTbE5VkYwCLvtwqYO1t69UJYcrpHXHHBV1NcnPHJ386wtb9Tz6vXuh5hRQPaDTXjX291oZhv6xHuK8w_FboQ7zE8ySUo-BHCV5USKeAWfIwK3EPr_SJGk9zT6hETaPXEl94websAEQ04YcJlPW7GqjT9k7XP8SCtTLQ6FLWa_iAfJMGqoArqzEc1wydZ_kRRvB9hvC4mp4-ggBAmpXdx3z7KGPqut1viRMQzL_Zc8DEF3DZKXoHBXUEZFwohGeAbv82XnBDmfgz3CON36Rk52pK8JMpXEzqMkqneDuIyGh_jwoiCUvvTqkxCKOEV6O6mj5NTU4AZ7KtxXOkv15Bj5V8Gb43TadWT2xoL02e1jTXe0_Mbv2ps0v3-rVMVTZs-FYpjf9PxWlkj4qbRNPRFEauSqlzlONzIj8QdeOxfisoOx9x2qI9opAhamJw",
+									"value": "{{access_token}}",
 									"type": "string"
 								}
 							]
@@ -96,14 +96,11 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8000/api/logout",
-							"protocol": "http",
+							"raw": "{{base_url}}/logout",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "8000",
 							"path": [
-								"api",
 								"logout"
 							]
 						}
@@ -131,14 +128,11 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8000/api/password/email",
-							"protocol": "http",
+							"raw": "{{base_url}}/password/email",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "8000",
 							"path": [
-								"api",
 								"password",
 								"email"
 							]
@@ -167,14 +161,11 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8000/api/password/reset",
-							"protocol": "http",
+							"raw": "{{base_url}}/password/reset",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "8000",
 							"path": [
-								"api",
 								"password",
 								"reset"
 							]
@@ -265,14 +256,11 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8000/api/categories",
-							"protocol": "http",
+							"raw": "{{base_url}}/categories",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "8000",
 							"path": [
-								"api",
 								"categories"
 							]
 						}
@@ -291,14 +279,11 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8000/api/categories/5",
-							"protocol": "http",
+							"raw": "{{base_url}}/categories/5",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "8000",
 							"path": [
-								"api",
 								"categories",
 								"5"
 							]
@@ -337,14 +322,11 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8000/api/categories",
-							"protocol": "http",
+							"raw": "{{base_url}}/categories",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "8000",
 							"path": [
-								"api",
 								"categories"
 							]
 						}
@@ -382,14 +364,11 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8000/api/categories/4",
-							"protocol": "http",
+							"raw": "{{base_url}}/categories/4",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "8000",
 							"path": [
-								"api",
 								"categories",
 								"4"
 							]
@@ -419,16 +398,13 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8000/api/categories/4",
-							"protocol": "http",
+							"raw": "{{base_url}}/categories/2",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "8000",
 							"path": [
-								"api",
 								"categories",
-								"4"
+								"2"
 							]
 						}
 					},
@@ -442,7 +418,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiOTk5OGNiNTdmNTBiMzE1ZDQ3MDMxNDI0OGNmMTYzNmRjZDM0MDgyNTNhNGJmMzY1NjE1MzFiNGE1ZjFkYWNkMDA0MGNkOWRmMmM3YmE1YjkiLCJpYXQiOjE3MjMzNTkzNDQuMzU2MDU1LCJuYmYiOjE3MjMzNTkzNDQuMzU2MDY0LCJleHAiOjE3NTQ4OTUzNDQuMzA2NzU2LCJzdWIiOiI3Iiwic2NvcGVzIjpbXX0.Zdo-UVE6mA79OTK-XqJTPPtqhkmPif0wgSAFs13tfCUNYSs7OFOFjdI00deJHnRYWlD5KBN-g1iuRgDWM55lzDBsLzJomr3Yw5Pw2Gl3sWo-MHufnETL348XgWuFsMMcsEI62Fun-9E-Fc2BTnh8rYu6se4GptwlRSiiWKa191hKtyG6FTZYjLi4eM7g0JYgSevM6SdMwkRdf7adFi3ZpgDJR0DHLAxsJ8j8XUGe-7qCIm-3zHLCbArkE1UQ59w5i2o-ybQ8_pqK464TL08dQh5zH1ZA6-lIDDseJGoO1-38Cmekh65fI2eZ4dXc8CUsn4gE2EmlvI9C9sFqFGo6vfaDENj91j5yl3Nzq4q8aM04SusBIEr0kYtW3kTuWhcKJZYG3qV7341zBUYwaZW2hN9UU3I41CTn94CYDWX_zZ7nOUnnq__dTQuFKvVuSZz0ymSy4KryPJehf4JwrnPuQqv7VF8edGZZN9UhXLz2NTarurAQwE2gddp1DLnQKqRHpHt70Nb3dm09u0ayxHkYMkJgVoQlhGXfsmwvizL86fhaQjHsRUa45Te8TI5sxTGZ1zTcYqC4MBqzwjVzuNsXz7tZzn2oX0OJprW3Qvrsgw8C3x54CJREISBc3r4Mzi9T8gbIw9YKf2O4Hj0bdk4zUDN_rvsx0kjR2rsYQpt2yJQ",
+									"value": "{{access_token}}",
 									"type": "string"
 								}
 							]
@@ -466,46 +442,14 @@
 							]
 						},
 						"url": {
-							"raw": "http://localhost:8000/api/categories/import",
-							"protocol": "http",
+							"raw": "{{baseUrl}}/api/categories/import",
 							"host": [
-								"localhost"
+								"{{baseUrl}}"
 							],
-							"port": "8000",
 							"path": [
 								"api",
 								"categories",
 								"import"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Categories paginated",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8000/api/categories?page=1&per_page=3",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"categories"
-							],
-							"query": [
-								{
-									"key": "page",
-									"value": "1"
-								},
-								{
-									"key": "per_page",
-									"value": "3"
-								}
 							]
 						}
 					},
@@ -568,14 +512,11 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8000/api/products/123",
-							"protocol": "http",
+							"raw": "{{base_url}}/products/123",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "8000",
 							"path": [
-								"api",
 								"products",
 								"123"
 							]
@@ -690,75 +631,13 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8000/api/products/23",
-							"protocol": "http",
+							"raw": "{{base_url}}/products/23",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "8000",
 							"path": [
-								"api",
 								"products",
 								"23"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Product paginated",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://127.0.0.1:8000/api/products?page=1",
-							"protocol": "http",
-							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"products"
-							],
-							"query": [
-								{
-									"key": "page",
-									"value": "1"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "search",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8000/api/products?per_page=10&search=Technologies\n",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"products"
-							],
-							"query": [
-								{
-									"key": "per_page",
-									"value": "10"
-								},
-								{
-									"key": "search",
-									"value": "Technologies\n"
-								}
 							]
 						}
 					},
@@ -800,14 +679,11 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8000/api/users",
-							"protocol": "http",
+							"raw": "{{base_url}}/users",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "8000",
 							"path": [
-								"api",
 								"users"
 							]
 						}
@@ -836,14 +712,11 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8000/api/users/1",
-							"protocol": "http",
+							"raw": "{{base_url}}/users/1",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "8000",
 							"path": [
-								"api",
 								"users",
 								"1"
 							]
@@ -882,14 +755,11 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8000/api/users/10004",
-							"protocol": "http",
+							"raw": "{{base_url}}/users/10004",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "8000",
 							"path": [
-								"api",
 								"users",
 								"10004"
 							]
@@ -919,63 +789,13 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8000/api/users/10002",
-							"protocol": "http",
+							"raw": "{{base_url}}/users/10002",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "8000",
 							"path": [
-								"api",
 								"users",
 								"10002"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Assign Role to User",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiOTk5OGNiNTdmNTBiMzE1ZDQ3MDMxNDI0OGNmMTYzNmRjZDM0MDgyNTNhNGJmMzY1NjE1MzFiNGE1ZjFkYWNkMDA0MGNkOWRmMmM3YmE1YjkiLCJpYXQiOjE3MjMzNTkzNDQuMzU2MDU1LCJuYmYiOjE3MjMzNTkzNDQuMzU2MDY0LCJleHAiOjE3NTQ4OTUzNDQuMzA2NzU2LCJzdWIiOiI3Iiwic2NvcGVzIjpbXX0.Zdo-UVE6mA79OTK-XqJTPPtqhkmPif0wgSAFs13tfCUNYSs7OFOFjdI00deJHnRYWlD5KBN-g1iuRgDWM55lzDBsLzJomr3Yw5Pw2Gl3sWo-MHufnETL348XgWuFsMMcsEI62Fun-9E-Fc2BTnh8rYu6se4GptwlRSiiWKa191hKtyG6FTZYjLi4eM7g0JYgSevM6SdMwkRdf7adFi3ZpgDJR0DHLAxsJ8j8XUGe-7qCIm-3zHLCbArkE1UQ59w5i2o-ybQ8_pqK464TL08dQh5zH1ZA6-lIDDseJGoO1-38Cmekh65fI2eZ4dXc8CUsn4gE2EmlvI9C9sFqFGo6vfaDENj91j5yl3Nzq4q8aM04SusBIEr0kYtW3kTuWhcKJZYG3qV7341zBUYwaZW2hN9UU3I41CTn94CYDWX_zZ7nOUnnq__dTQuFKvVuSZz0ymSy4KryPJehf4JwrnPuQqv7VF8edGZZN9UhXLz2NTarurAQwE2gddp1DLnQKqRHpHt70Nb3dm09u0ayxHkYMkJgVoQlhGXfsmwvizL86fhaQjHsRUa45Te8TI5sxTGZ1zTcYqC4MBqzwjVzuNsXz7tZzn2oX0OJprW3Qvrsgw8C3x54CJREISBc3r4Mzi9T8gbIw9YKf2O4Hj0bdk4zUDN_rvsx0kjR2rsYQpt2yJQ",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"role\": \"admin\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8000/api/users/9/roles",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"users",
-								"9",
-								"roles"
 							]
 						}
 					},
@@ -1044,14 +864,11 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8000/api/roles",
-							"protocol": "http",
+							"raw": "{{base_url}}/roles",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "8000",
 							"path": [
-								"api",
 								"roles"
 							]
 						}
@@ -1089,14 +906,11 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8000/api/roles/2",
-							"protocol": "http",
+							"raw": "{{base_url}}/roles/2",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "8000",
 							"path": [
-								"api",
 								"roles",
 								"2"
 							]
@@ -1126,14 +940,11 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8000/api/roles/10002",
-							"protocol": "http",
+							"raw": "{{base_url}}/roles/10002",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "8000",
 							"path": [
-								"api",
 								"roles",
 								"10002"
 							]
@@ -1172,14 +983,11 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8000/api/roles/2/permissions",
-							"protocol": "http",
+							"raw": "{{base_url}}/roles/2/permissions",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "8000",
 							"path": [
-								"api",
 								"roles",
 								"2",
 								"permissions"
@@ -1196,7 +1004,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiOTk5OGNiNTdmNTBiMzE1ZDQ3MDMxNDI0OGNmMTYzNmRjZDM0MDgyNTNhNGJmMzY1NjE1MzFiNGE1ZjFkYWNkMDA0MGNkOWRmMmM3YmE1YjkiLCJpYXQiOjE3MjMzNTkzNDQuMzU2MDU1LCJuYmYiOjE3MjMzNTkzNDQuMzU2MDY0LCJleHAiOjE3NTQ4OTUzNDQuMzA2NzU2LCJzdWIiOiI3Iiwic2NvcGVzIjpbXX0.Zdo-UVE6mA79OTK-XqJTPPtqhkmPif0wgSAFs13tfCUNYSs7OFOFjdI00deJHnRYWlD5KBN-g1iuRgDWM55lzDBsLzJomr3Yw5Pw2Gl3sWo-MHufnETL348XgWuFsMMcsEI62Fun-9E-Fc2BTnh8rYu6se4GptwlRSiiWKa191hKtyG6FTZYjLi4eM7g0JYgSevM6SdMwkRdf7adFi3ZpgDJR0DHLAxsJ8j8XUGe-7qCIm-3zHLCbArkE1UQ59w5i2o-ybQ8_pqK464TL08dQh5zH1ZA6-lIDDseJGoO1-38Cmekh65fI2eZ4dXc8CUsn4gE2EmlvI9C9sFqFGo6vfaDENj91j5yl3Nzq4q8aM04SusBIEr0kYtW3kTuWhcKJZYG3qV7341zBUYwaZW2hN9UU3I41CTn94CYDWX_zZ7nOUnnq__dTQuFKvVuSZz0ymSy4KryPJehf4JwrnPuQqv7VF8edGZZN9UhXLz2NTarurAQwE2gddp1DLnQKqRHpHt70Nb3dm09u0ayxHkYMkJgVoQlhGXfsmwvizL86fhaQjHsRUa45Te8TI5sxTGZ1zTcYqC4MBqzwjVzuNsXz7tZzn2oX0OJprW3Qvrsgw8C3x54CJREISBc3r4Mzi9T8gbIw9YKf2O4Hj0bdk4zUDN_rvsx0kjR2rsYQpt2yJQ",
+									"value": "{{access_token}}",
 									"type": "string"
 								}
 							]
@@ -1219,14 +1027,11 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8000/api/roles/16/permissions",
-							"protocol": "http",
+							"raw": "{{base_url}}/roles/16/permissions",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "8000",
 							"path": [
-								"api",
 								"roles",
 								"16",
 								"permissions"
@@ -1326,14 +1131,11 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8000/api/permissions",
-							"protocol": "http",
+							"raw": "{{base_url}}/permissions",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "8000",
 							"path": [
-								"api",
 								"permissions"
 							]
 						}
@@ -1371,14 +1173,11 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8000/api/permissions/10002",
-							"protocol": "http",
+							"raw": "{{base_url}}/permissions/10002",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "8000",
 							"path": [
-								"api",
 								"permissions",
 								"10002"
 							]
@@ -1394,7 +1193,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiOTk5OGNiNTdmNTBiMzE1ZDQ3MDMxNDI0OGNmMTYzNmRjZDM0MDgyNTNhNGJmMzY1NjE1MzFiNGE1ZjFkYWNkMDA0MGNkOWRmMmM3YmE1YjkiLCJpYXQiOjE3MjMzNTkzNDQuMzU2MDU1LCJuYmYiOjE3MjMzNTkzNDQuMzU2MDY0LCJleHAiOjE3NTQ4OTUzNDQuMzA2NzU2LCJzdWIiOiI3Iiwic2NvcGVzIjpbXX0.Zdo-UVE6mA79OTK-XqJTPPtqhkmPif0wgSAFs13tfCUNYSs7OFOFjdI00deJHnRYWlD5KBN-g1iuRgDWM55lzDBsLzJomr3Yw5Pw2Gl3sWo-MHufnETL348XgWuFsMMcsEI62Fun-9E-Fc2BTnh8rYu6se4GptwlRSiiWKa191hKtyG6FTZYjLi4eM7g0JYgSevM6SdMwkRdf7adFi3ZpgDJR0DHLAxsJ8j8XUGe-7qCIm-3zHLCbArkE1UQ59w5i2o-ybQ8_pqK464TL08dQh5zH1ZA6-lIDDseJGoO1-38Cmekh65fI2eZ4dXc8CUsn4gE2EmlvI9C9sFqFGo6vfaDENj91j5yl3Nzq4q8aM04SusBIEr0kYtW3kTuWhcKJZYG3qV7341zBUYwaZW2hN9UU3I41CTn94CYDWX_zZ7nOUnnq__dTQuFKvVuSZz0ymSy4KryPJehf4JwrnPuQqv7VF8edGZZN9UhXLz2NTarurAQwE2gddp1DLnQKqRHpHt70Nb3dm09u0ayxHkYMkJgVoQlhGXfsmwvizL86fhaQjHsRUa45Te8TI5sxTGZ1zTcYqC4MBqzwjVzuNsXz7tZzn2oX0OJprW3Qvrsgw8C3x54CJREISBc3r4Mzi9T8gbIw9YKf2O4Hj0bdk4zUDN_rvsx0kjR2rsYQpt2yJQ",
+									"value": "{{access_token}}",
 									"type": "string"
 								}
 							]
@@ -1408,14 +1207,11 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8000/api/permissions/16",
-							"protocol": "http",
+							"raw": "{{base_url}}/permissions/16",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "8000",
 							"path": [
-								"api",
 								"permissions",
 								"16"
 							]
@@ -1469,7 +1265,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiYjVlMWVkYWVjYjU1MjhhYmE1MTcyNGI1YzAxOTQzZWU5MDhmOWMxOWIyYzUxOWNhNjhkOGJmZjEzOGIzYmM1ZmRkZThlOGM4MmI5NGM4MzMiLCJpYXQiOjE3MjQ2NjMzNTMuODEyMzY1LCJuYmYiOjE3MjQ2NjMzNTMuODEyMzcxLCJleHAiOjE3NTYxOTkzNTMuNTkyMjQyLCJzdWIiOiIyMCIsInNjb3BlcyI6W119.IrEaDLnivCb8ioLMyVE8lWkYHtX8v0HHodQt2448dnJgigwsG6K6lrP43KDovqhkIVyuxHbZJw7PPslx-3kz5LT4CD3sRGSxtsm9FwFDcNbYNSpvTpsJJx-gRmlUF5N_co7VZMptQMahKU_hyVRuUd0Uwfz5iJSDkPKHZuY9I7mjYLpe-PNS1Vy2u13HTqKdfL8MtgghoEDUW4Qdfosr7fKF8HBMT5mgzhrgcRtG7nRG0qzolOXlvWRfgLJXhIMqIqBld-TMUQFTtaPM0tz7Huk9W09YMoYSHzB2eennL67fFw05HzFqDmysu1bKveZbhaUjOQr6zBxtMgLRlLyTdhDEu40dt3N9rDkjUfdqrPHcH52CVezI-10X4TZdqkTnFIP7UQ_SA6RJCj1wjWTSo39kOxRvZRgC2_DBkrpnwRnnI707sGeFG2a7ec6OQkPmEUacZyxRJtG0SjXcSev1KEdBjdSXnWa_J05jU3ICm_vN_lT7gH4X9sfui1CFGtXJpU1vThOa6VK8C7rTYQKzr_hMu2wBrBuYJB09WZyAG3hw3D3WVWZ70uURN4MpzeFFTXIFK3_ezuMCa7gAStTykRkdXTE56OpE-1A8C05pjr52XEqf_G4B6zoT-mOJJ-UnpYUAvCpEFQZTsIY3vGAHjvGY621Izpi3tJnQXa1a83A",
+									"value": "{{access_token}}",
 									"type": "string"
 								}
 							]
@@ -1493,14 +1289,11 @@
 							]
 						},
 						"url": {
-							"raw": "http://localhost:8000/api/delete-image",
-							"protocol": "http",
+							"raw": "{{base_url}}/delete-image",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "8000",
 							"path": [
-								"api",
 								"delete-image"
 							]
 						}
