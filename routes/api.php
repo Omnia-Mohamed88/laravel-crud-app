@@ -10,6 +10,11 @@ use App\Http\Controllers\Api\PermissionController;
 use App\Http\Controllers\Api\RolePermissionController;
 use App\Http\Controllers\Api\UploadController;
 
+Route::get("/aa",function(){
+    // dd(\App\Models\Category::inactive()->get());
+    return response()->json(\App\Models\Category::all());
+});
+
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 

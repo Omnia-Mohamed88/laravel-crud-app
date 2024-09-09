@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Utils\Constants;
 
 return new class extends Migration
 {
@@ -15,6 +16,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('image_url')->nullable(); 
+            $table->tinyInteger('active')->default(Constants::$CATEGORY_STATUS_ACTIVE);
             $table->softDeletes();
             $table->timestamps();
         });
