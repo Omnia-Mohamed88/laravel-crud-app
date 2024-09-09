@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Models\Product;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\ProductResource;
@@ -14,7 +15,7 @@ use Illuminate\Http\JsonResponse;
 class ProductController extends Controller
 {
 
-    public function index()
+    public function index(): JsonResponse
     {
         $filtered = $this->filterData();
         $data = ProductResource::collection($filtered);
@@ -27,7 +28,7 @@ class ProductController extends Controller
         try {
             $product = Product::create($request->validated());
             DB::commit();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             DB::rollback();
             info($e);
             return $this->respondError($e->getMessage(), "Failed to store the product.");
@@ -35,7 +36,7 @@ class ProductController extends Controller
         return $this->respondCreated(ProductResource::make($product), 'Product created successfully.');
     }
 
-    public function update(UpdateProductRequest $request, Product $product): JsonResponse //modle binding
+    public function update(UpdateProductRequest $request, Product $product): JsonResponse
     {
         try {
             $product->update($request->validated());
@@ -56,7 +57,7 @@ class ProductController extends Controller
                     }
                 }
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             DB::rollback();
             return $this->respondError($e->getMessage(), "Failed to update the product.");
         }
@@ -85,7 +86,7 @@ class ProductController extends Controller
             $product->delete();
 
             return $this->respondSuccess("Product deleted successfully.");
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $this->respondError($e->getMessage(), "Failed to delete the product.");
         }
     }

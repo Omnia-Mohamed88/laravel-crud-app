@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Requests\LoginRequest;
@@ -29,7 +30,7 @@ class AuthController extends Controller
             $user->assignRole('user');
             $user["token"] = $user->createToken('Personal Access Token')->accessToken;
             DB::commit();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             DB::rollback();
             return $this->respondError($e->getMessage(), "error in registration");
         }

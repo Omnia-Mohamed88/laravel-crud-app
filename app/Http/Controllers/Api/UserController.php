@@ -5,12 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Requests\StoreUserRequest;
-use App\Http\Requests\AssignRoleRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use Exception;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
 use OpenApi\Annotations as OA;
 
@@ -105,7 +103,7 @@ class UserController extends Controller
             $user->assignRole($role);
             DB::commit();
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             info($e);
             DB::rollback();
             return $this->respondError($e->getMessage(), "error in creating user");
@@ -203,9 +201,9 @@ class UserController extends Controller
                 $user->syncRoles($request->validated()['role']);
             }
             DB::commit();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             DB::rollback();
-            return response()->json(["data" => "error in updating user", "error" => $e->getMessage()], 400);
+            return $this->respondError($e->getMessage());
         }
 
         return $this->respondForResource(UserResource::make($user), 'user Data');

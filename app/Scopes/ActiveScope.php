@@ -9,8 +9,8 @@ use App\Utils\Constants;
 
 class ActiveScope implements Scope
 {
-    public function apply(Builder $builder, Model $model)
+    public function apply(Builder $builder, Model $model): void
     {
-        // $builder->where('active', Constants::$CATEGORY_STATUS_ACTIVE);
+         $builder->where('active', Constants::$CATEGORY_STATUS_ACTIVE);
     }
 }
