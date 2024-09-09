@@ -31,6 +31,10 @@ class Category extends Model
         return $this->active == Constants::$CATEGORY_STATUS_ACTIVE ? Constants::$CATEGORY_STATUS_ACTIVE_LABEL : Constants::$CATEGORY_STATUS_INACTIVE_LABEL;
     }
 
+
+
+
+    
     // protected function attachmentsData(): Attribute
     // {
     //     return Attribute::make(

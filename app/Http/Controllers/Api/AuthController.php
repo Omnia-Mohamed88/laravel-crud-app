@@ -34,13 +34,9 @@ class AuthController extends Controller
             \DB::commit();
         }catch(\Exception $e){
             \DB::rollback();
-            return response()->json(["data" => "error in registration","error" => $e->getMessage()],400);
-        }
+            return $this->respondError($e->getMessage(),"Faild to register");
 
-        // return response()->json([
-        //     "message" => "User Created Successfully.",
-        //     'data' => $user
-        // ], 201);
+        }
 
         return $this->respondCreated($user,"User Created Successfully");
     }
@@ -58,12 +54,6 @@ class AuthController extends Controller
         return $this->respond($user,'Logged in Successfully!');
         
     }
-
-    // return response()->json([
-    //     'error' => [
-    //         'message' => 'Invalid email or password. Please check your credentials and try again.'
-    //     ]
-    // ], 400);
 
     $errors = [
         'credentials' => 'Invalid email or password. Please check your credentials and try again.'
