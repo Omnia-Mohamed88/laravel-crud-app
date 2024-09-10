@@ -1,53 +1,55 @@
 <?php
+
 namespace App\Http\Controllers\Api;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 
 class UploadController extends Controller
 {
-public function saveOnDisk(Request $request)
-{
-    $request->validate([
-        'files.*' => 'required|image|max:2048',
-    ]);
+    public function saveOnDisk(Request $request): JsonResponse
+    {
+        $request->validate([
+            'files.*' => 'required|image|max:2048',
+        ]);
 
-    $urls = [];
+        $urls = [];
 
-    if ($request->hasFile('files')) {
-        $files = $request->file('files');
-        foreach ($files as $file) {
-            $path = $file->storeAs('public/attachments',date("Ymdhis").'-'.$file->getClientOriginalName());
-            $urls[] = config('app.url').Storage::url($path);
+        if ($request->hasFile('files')) {
+            $files = $request->file('files');
+            foreach ($files as $file) {
+                $path = $file->storeAs('public/attachments', date("Ymdhis") . '-' . $file->getClientOriginalName());
+                $urls[] = config('app.url') . Storage::url($path);
+            }
+            return $this->respond(["urls" => $urls, "count" => count($files)]);
+
         }
-        return response()->json(['urls' => $urls, 'count' => count($files)], 200);
+
+        return $this->respond(["urls" => $urls],'No files uploaded');
     }
 
-    return response()->json(['message' => 'No files uploaded', 'urls' => $urls], 200);
-}
+    public function deleteImage(Request $request): JsonResponse
+    {
+        $request->validate([
+            'file_url' => 'required|string',
+        ]);
 
-public function deleteImage(Request $request)
-{
-    $request->validate([
-        'file_url' => 'required|string',
-    ]);
+        $fileUrl = $request->input('file_url');
 
-    $fileUrl = $request->input('file_url');
+        $filePath = parse_url($fileUrl, PHP_URL_PATH);
+        $filePath = str_replace('/storage/', 'public/', $filePath);
 
-    $filePath = parse_url($fileUrl, PHP_URL_PATH); 
-    $filePath = str_replace('/storage/', 'public/', $filePath);
+        info("Attempting to delete file at: " . $filePath);
 
-    \Log::info("Attempting to delete file at: " . $filePath);
+        if (Storage::exists($filePath)) {
+            Storage::delete($filePath);
+            return $this->respondSuccess("File deleted successfully");
+        }
 
-    if (Storage::exists($filePath)) {
-        Storage::delete($filePath);
-        return response()->json(['message' => 'File deleted successfully'], 200);
+        return $this->respondError('File not found', 404);
     }
-
-    return response()->json(['message' => 'File not found'], 404);
-}
-
 
 
 }

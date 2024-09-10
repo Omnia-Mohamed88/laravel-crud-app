@@ -7,12 +7,10 @@ use App\Http\Requests\StorePermissionRequest;
 use App\Http\Requests\UpdatePermissionRequest;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class PermissionController extends Controller
 {
-    public function index() : JsonResponse
+    public function index(): JsonResponse
     {
         $query = Permission::query();
         if (request()->per_page) {
@@ -23,49 +21,26 @@ class PermissionController extends Controller
         return $this->respond($query, "Permission List");
     }
 
-    public function store(StorePermissionRequest $request) : JsonResponse
+    public function store(StorePermissionRequest $request): JsonResponse
     {
-        DB::beginTransaction();
-        try {
-            $validated = $request->validated();
-            $permission = Permission::create($validated); 
-            DB::commit();
-            return $this->respondCreated($permission, 'Permission created successfully.');
-        } catch (\Exception $e) {
-            DB::rollback();
-            return $this->respondError($e->getMessage(), "Failed to store Permission");
-        }
+        $permission = Permission::create($request->validated());
+        return $this->respondCreated($permission, 'Permission created successfully.');
     }
 
-    public function show(Permission $permission) : JsonResponse
+    public function show(Permission $permission): JsonResponse
     {
         return $this->respond($permission, 'Permission Data');
     }
 
-    public function update(UpdatePermissionRequest $request, Permission $permission) : JsonResponse
+    public function update(UpdatePermissionRequest $request, Permission $permission): JsonResponse
     {
-        DB::beginTransaction();
-        try {
-            $validated = $request->validated();
-            $permission->update($validated); 
-            DB::commit();
-            return $this->respondCreated($permission, 'Permission updated successfully.');
-        } catch (\Exception $e) {
-            DB::rollback();
-            return $this->respondError($e->getMessage(), "Failed to update Permission");
-        }
+        $permission->update($request->validated());
+        return $this->respondCreated($permission, 'Permission updated successfully.');
     }
 
-    public function destroy(Permission $permission) : JsonResponse
+    public function destroy(Permission $permission): JsonResponse
     {
-        DB::beginTransaction();
-        try {
-            $permission->delete();
-            DB::commit();
-            return $this->respondSuccess("Permission deleted successfully.");
-        } catch (\Exception $e) {
-            DB::rollback();
-            return $this->respondError($e->getMessage(), "Failed to delete the Permission.");
-        }
+        $permission->delete();
+        return $this->respondSuccess("Permission deleted successfully.");
     }
 }

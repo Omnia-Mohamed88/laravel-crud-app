@@ -1,124 +1,109 @@
 <?php
-namespace App\Http\Controllers\Api;
-use App\Http\Controllers\Controller; 
 
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\PasswordResetRequest;
-
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use Illuminate\Support\Facades\Password;
 use App\Notifications\CustomResetPasswordNotification;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\ValidationException;
 use App\Http\Requests\SendResetLinkEmailNewRequest;
 use Illuminate\Support\Str;
 use App\Models\EmailToken;
 use App\Http\Requests\ResetNewRequest;
-use Mail;
+use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
-    // Register a new user
-    public function register(RegisterRequest $request)
+    public function register(RegisterRequest $request): JsonResponse
     {
-        \DB::beginTransaction();
-        try{
-            $user = User::create($request->validated());   
+        DB::beginTransaction();
+        try {
+            $user = User::create($request->validated());
             $user->assignRole('user');
             $user["token"] = $user->createToken('Personal Access Token')->accessToken;
-            \DB::commit();
-        }catch(\Exception $e){
-            \DB::rollback();
-            return $this->respondError($e->getMessage(),"Faild to register");
-
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollback();
+            return $this->respondError($e->getMessage(), "error in registration");
         }
 
-        return $this->respondCreated($user,"User Created Successfully");
+        return $this->respondCreated($user, "User Created Successfully");
     }
 
-
-
-    public function login(LoginRequest $request)
+    public function login(LoginRequest $request): JsonResponse
     {
-    $user = User::whereEmail($request->email)->first();
-    if($user && Hash::check($request->password,$user->password))
-    {
-        $user["token"] = $user->createToken('Personal Access Token')->accessToken;
-        $user["roles"] = $user->getRoleNames();
-
-        return $this->respond($user,'Logged in Successfully!');
-        
-    }
-
-    $errors = [
-        'credentials' => 'Invalid email or password. Please check your credentials and try again.'
-    ];
-
-    return $this->respondError($errors,"Login Failed!");
+        $user = User::whereEmail($request->email)->first();
+        if ($user && Hash::check($request->password, $user->password)) {
+            $user["token"] = $user->createToken('Personal Access Token')->accessToken;
+            $user["roles"] = $user->getRoleNames();
+            return $this->respond($user, 'Logged in Successfully!');
+        }
+        $errors = [
+            'credentials' => 'Invalid email or password. Please check your credentials and try again.'
+        ];
+        return $this->respondError($errors, "Login Failed!");
 
     }
-    public function logout()
+
+    public function logout(): JsonResponse
     {
         auth()->user()->tokens()->delete();
-        return response()->json(['message' => 'Logged out successfully']);
+        return $this->respondSuccess("Logged out successfully");
     }
 
-    // Send password reset link
-    public function sendResetLinkEmail(Request $request)
+    public function sendResetLinkEmail(Request $request): JsonResponse
     {
+        $request->validate([
+            'email' => 'required|string|email|max:255',
+        ]);
 
-    $request->validate([
-        'email' => 'required|string|email|max:255',
-    ]);
-
-    $response = Password::sendResetLink($request->only('email'), function ($user, $token) {
-        $user->notify(new CustomResetPasswordNotification($token));
-    });    
-    return $response == Password::RESET_LINK_SENT
-                ? response()->json(['message' => 'Password reset link sent'], 200)
-                : response()->json(['error' => 'Unable to send password reset link'], 500);
+        $response = Password::sendResetLink($request->only('email'), function ($user, $token) {
+            $user->notify(new CustomResetPasswordNotification($token));
+        });
+        return $response == Password::RESET_LINK_SENT
+            ? $this->respondSuccess("Password reset link sent")
+            : $this->respondError("Unable to send password reset link");
     }
 
-    // Reset password
-    public function reset(PasswordResetRequest $request)
+    public function reset(PasswordResetRequest $request): JsonResponse
     {
-        // $validated = $request->validated();
-
         $response = Password::reset($request->only('email', 'token', 'password', 'password_confirmation'), function ($user, $password) {
             $user->password = Hash::make($password);
             $user->save();
         });
         return $response == Password::PASSWORD_RESET
-                    ? response()->json(['message' => 'Password has been reset'], 200)
-                    : response()->json(['error' => 'Unable to reset password'], 500);
+            ? $this->respondSuccess("Password has been reset")
+            : $this->respondError("Unable to reset password");
     }
 
-    public function sendResetLinkEmailNew(SendResetLinkEmailNewRequest $request)
+    public function sendResetLinkEmailNew(SendResetLinkEmailNewRequest $request): JsonResponse
     {
-    $token = rand(1111,9999).Str::random(10);
-    EmailToken::create(["email" => $request->email ,"token" =>  $token]);
+        $token = rand(1111, 9999) . Str::random(10);
+        EmailToken::create(["email" => $request->email, "token" => $token]);
 
-    Mail::raw(env("FRONTEND_URL").'/reset-password?token='.$token, function ($message) use($request) {
-        $message->to($request->email)->subject('Reset Your Password!');
+        Mail::raw(env("FRONTEND_URL") . '/reset-password?token=' . $token, function ($message) use ($request) {
+            $message->to($request->email)->subject('Reset Your Password!');
         });
 
-    return response()->json(["message" => "Mail sent successfully"]);
+        return $this->respondSuccess("Mail sent successfully");
+
     }
 
-    public function resetNew(ResetNewRequest $request)
+    public function resetNew(ResetNewRequest $request): JsonResponse
     {
+        $email = EmailToken::whereToken($request->token)->first()->email;
+        User::whereEmail($email)->first()->update([
+            "password" => bcrypt($request->password)
+        ]);
+        return $this->respondSuccess("Password has been reset successfully");
 
-    $email = EmailToken::whereToken($request->token)->first()->email;
-
-    User::whereEmail($email)->first()->update([
-        "password" => bcrypt($request->password)
-    ]);
-
-    return response()->json(["message" => "Password has been reset successfully"]);
     }
 }

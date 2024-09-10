@@ -5,18 +5,16 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Requests\StoreUserRequest;
-use App\Http\Requests\AssignRoleRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
+use Exception;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\JsonResponse;
 use OpenApi\Annotations as OA;
 
 class UserController extends Controller
 {
-   
-   
+
 
     /**
      * @OA\Get(
@@ -51,18 +49,18 @@ class UserController extends Controller
     //     $users = User::all();
     //     return UserResource::collection($users);
     // }
-     public function index(): JsonResponse
-     {
+    public function index(): JsonResponse
+    {
         $query = User::query();
-        if (request()->per_page){
+        if (request()->per_page) {
             $query = $query->paginate(request()->per_page);
-        }
-        else{
-            $query = $query -> get();
+        } else {
+            $query = $query->get();
         }
         $data = UserResource::collection($query);
-        return $this->respondForResource($data,"user List");
-     }
+        return $this->respondForResource($data, "user List");
+    }
+
     /**
      * @OA\Post(
      *     path="/api/users",
@@ -96,23 +94,23 @@ class UserController extends Controller
      *     )
      * )
      */
-    public function store(StoreUserRequest $request) : JsonResponse
-    {   
-        \DB::beginTransaction();
-         try{
+    public function store(StoreUserRequest $request): JsonResponse
+    {
+        DB::beginTransaction();
+        try {
             $user = User::create($request->validated());
-        $role = $request->validated()['role'] ?? 'user'; 
-        $user->assignRole($role);
-        \DB::commit(); 
+            $role = $request->validated()['role'] ?? 'user';
+            $user->assignRole($role);
+            DB::commit();
 
-         }
-         catch(\Exception $e){
-            \DB::rollback();
-            return response()->json(["data" => "error in creating user","error" => $e->getMessage()],400);
-        }        
+        } catch (Exception $e) {
+            info($e);
+            DB::rollback();
+            return $this->respondError($e->getMessage(), "error in creating user");
+        }
         return $this->respondCreated($user, "User Created Successfully");
     }
-    
+
 
     /**
      * @OA\Get(
@@ -145,10 +143,10 @@ class UserController extends Controller
      *     )
      * )
      */
-    public function show(User $user) : JsonResponse
-    {                                  
-        return $this->respondForResource(UserResource::make($user),'user Data');
-        }
+    public function show(User $user): JsonResponse
+    {
+        return $this->respondForResource(UserResource::make($user), 'user Data');
+    }
 
     /**
      * @OA\Put(
@@ -189,31 +187,28 @@ class UserController extends Controller
      *     )
      * )
      */
-    public function update(UpdateUserRequest $request, User $user) : JsonResponse
+    public function update(UpdateUserRequest $request, User $user): JsonResponse
     {
-        \DB::beginTransaction();
+        DB::beginTransaction();
         try {
             if ($request->has('password')) {
-                $user->password =bcrypt($request->password);
-
-                $user->save();
+                $request["password"] = bcrypt($request->password);
             }
-    
+
+            $user->update($request->validated());
+
             if ($request->has('role')) {
                 $user->syncRoles($request->validated()['role']);
             }
-    
-            $user->update($request->validated());
-    
-            \DB::commit(); 
-        } catch (\Exception $e) {
-            \DB::rollback(); 
-            return response()->json(["data" => "error in updating user", "error" => $e->getMessage()], 400);
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollback();
+            return $this->respondError($e->getMessage());
         }
-    
+
         return $this->respondForResource(UserResource::make($user), 'user Data');
     }
-    
+
     /**
      * @OA\Delete(
      *     path="/api/users/{id}",
@@ -242,18 +237,11 @@ class UserController extends Controller
      *     )
      * )
      */
-  
-  public function destroy(User $user) : JsonResponse
-{
-    \DB::beginTransaction();
-    try {
+
+    public function destroy(User $user): JsonResponse
+    {
         $user->delete();
-        \DB::commit();
         return $this->respondSuccess("User deleted successfully.");
-    } catch (\Exception $e) {
-        \DB::rollback();
-        return $this->respondError($e->getMessage(), "Failed to delete the User.");
     }
-}
 
 }
