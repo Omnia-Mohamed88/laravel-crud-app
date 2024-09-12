@@ -106,4 +106,5 @@ class AuthController extends Controller
         return $this->respondSuccess("Password has been reset successfully");
 
     }
+
 }

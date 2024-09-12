@@ -83,7 +83,6 @@ class Category extends Model
     }
 
     //Local
-
     public function scopeActive(Builder $query): void
     {
         $query->where('active', Constants::$CATEGORY_STATUS_ACTIVE);
