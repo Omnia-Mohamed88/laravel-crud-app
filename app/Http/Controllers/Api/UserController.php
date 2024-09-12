@@ -244,4 +244,13 @@ class UserController extends Controller
         return $this->respondSuccess("User deleted successfully.");
     }
 
+    public function profile(): JsonResponse
+    {
+        $user = auth()->user();
+        $role =  $user->roles()->first();
+        $user["role_id"] = $role->id;
+        $user["role_name"] = $role->name;
+        return $this->respond($user,"User Data");
+    }
+
 }

@@ -32,7 +32,7 @@ trait ApiResponder {
     {
         return response()->json([
             'message' => $message,
-            'errors' => [$errors]
+            'errors' => $errors
         ],$status);
     }
 
