@@ -29,6 +29,7 @@ Route::get('products', [ProductController::class, 'index']);
 Route::get('products/{product}', [ProductController::class, 'show']);
 
 Route::middleware('auth:api')->group(function () {
+    Route::get("/profile",[UserController::class,'profile']);
     Route::post('logout', [AuthController::class, 'logout']);
 
     Route::middleware([ 'role:admin,superadmin'])->group(function () {

@@ -43,13 +43,15 @@ class AuthController extends Controller
         $user = User::whereEmail($request->email)->first();
         if ($user && Hash::check($request->password, $user->password)) {
             $user["token"] = $user->createToken('Personal Access Token')->accessToken;
-            $user["roles"] = $user->getRoleNames();
+            $role =  $user->roles()->first();
+            $user["role_id"] =$role->id;
+            $user["role_name"] = $role->name;
             return $this->respond($user, 'Logged in Successfully!');
         }
         $errors = [
             'credentials' => 'Invalid email or password. Please check your credentials and try again.'
         ];
-        return $this->respondError($errors, "Login Failed!");
+        return $this->respondError($errors, "Login Failed!",422);
 
     }
 
