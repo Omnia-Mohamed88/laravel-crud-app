@@ -17,7 +17,8 @@ class ProductController extends Controller
 
     public function index(): JsonResponse
     {
-        $filtered = $this->filterData();
+        // $filtered = $this->filterData();
+        $filtered = Product::with('category')->get();
         $data = ProductResource::collection($filtered);
         return $this->respondForResource($data, "Products List");
     }
@@ -68,8 +69,10 @@ class ProductController extends Controller
 
     public function show(Product $product): JsonResponse
     {
+        $product->load('category');
         return $this->respondForResource(ProductResource::make($product), 'Product Data');
     }
+    
 
     public function destroy(Product $product): JsonResponse
     {
