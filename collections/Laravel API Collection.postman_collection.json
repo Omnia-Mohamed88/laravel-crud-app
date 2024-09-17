@@ -23,7 +23,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"client\",\n    \"email\": \"client@example.com\",\n    \"password\": \"password\",\n    \"password_confirmation\": \"password\"\n}",
+							"raw": "{\n    \"name\": \"client\",\n    \"email\": \"clieent@example.com\",\n    \"password\": \"password\",\n    \"password_confirmation\": \"password\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -55,7 +55,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"adminpassword\"\n}",
+							"raw": "{\n  \"email\": \"superadmin@example.com\",\n  \"password\": \"superadminpassword\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -238,6 +238,40 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "verify token",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/password/verify-token?token=1855qoTfJVtKwx",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"password",
+								"verify-token"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "1855qoTfJVtKwx"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -314,7 +348,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"title\": \"Sample Products testtt34\",\r\n    \"attachments\": [\r\n        {\r\n            \"file_path\": \"http://localhost:8000/storage/attachments/20240907075652-electronics.jpg\"\r\n    \r\n        }\r\n    ]\r\n}",
+							"raw": "{\r\n    \"title\": \"Electronics\"\r\n   \r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -356,7 +390,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"title\": \"Updated Product\",\r\n    \"description\": \"This is a sample updated product.\",\r\n    \"price\": 199.99,\r\n    \"category_id\": 1,\r\n    \"attachments\": {\r\n        \"create\": [\r\n            {\r\n                \"file_path\": \"http://localhost:8000/storage/attachments/20240907083903-skincarecategory.jpg\"\r\n            }\r\n        ],\r\n        \"delete\": [41]\r\n    }\r\n}",
+							"raw": "{\r\n    \"title\": \"Updated Product\",\r\n    \"attachments\": {\r\n        \"create\": [\r\n            {\r\n                \"file_path\": \"http://localhost:8000/storage/attachments/20240905025625-microwave.jpg\"\r\n            }\r\n        ],\r\n        \"delete\": []\r\n    }\r\n   \r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -364,13 +398,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/categories/4",
+							"raw": "{{base_url}}/categories/6",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"categories",
-								"4"
+								"6"
 							]
 						}
 					},
@@ -512,13 +546,13 @@
 							}
 						],
 						"url": {
-							"raw": "{{base_url}}/products/123",
+							"raw": "{{base_url}}/products/8",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"products",
-								"123"
+								"8"
 							]
 						}
 					},
@@ -547,7 +581,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"title\": \"Sample Products testtt34\",\r\n    \"description\": \"This is a sample product.\",\r\n    \"price\": 99.99,\r\n    \"category_id\": 1,\r\n    \"attachments\": [\r\n        {\r\n            \"file_path\": \"http://localhost:8000/storage/attachments/20240905025442-fashon.jpg\"\r\n    \r\n        }\r\n    ]\r\n}\r\n",
+							"raw": "{\r\n    \"title\": \"Sample Products testtt34\",\r\n    \"description\": \"This is a sample product.\",\r\n    \"price\": 99.99,\r\n    \"category_id\": 1,\r\n    \"attachments\": [\r\n        {\r\n            \"file_path\": \"http://localhost:8000/storage/attachments/20240913082706-skincarecategory.jpg\"\r\n    \r\n        }\r\n    ]\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -597,13 +631,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/products/28",
+							"raw": "{{base_url}}/products/14",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"products",
-								"28"
+								"14"
 							]
 						}
 					},
@@ -1257,49 +1291,6 @@
 		{
 			"name": "Attachments",
 			"item": [
-				{
-					"name": "delete image",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{access_token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "file_url",
-									"value": "/storage/attachments/G8LrJtUCOql1xskRH7qhnYYpPvfAGlvSSJCpsrUZ.png",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{base_url}}/delete-image",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"delete-image"
-							]
-						}
-					},
-					"response": []
-				},
 				{
 					"name": "Upload File",
 					"request": {
