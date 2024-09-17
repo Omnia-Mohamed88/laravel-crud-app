@@ -28,6 +28,9 @@ class AuthController extends Controller
         try {
             $user = User::create($request->validated());
             $user->assignRole('user');
+            $role =  $user->roles()->first();
+            $user["role_id"] =$role->id;
+            $user["role_name"] = $role->name;
             $user["token"] = $user->createToken('Personal Access Token')->accessToken;
             DB::commit();
         } catch (Exception $e) {

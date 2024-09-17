@@ -17,8 +17,7 @@ class ProductController extends Controller
 
     public function index(): JsonResponse
     {
-        // $filtered = $this->filterData();
-        $filtered = Product::with('category')->get();
+        $filtered = $this->filterData();
         $data = ProductResource::collection($filtered);
         return $this->respondForResource($data, "Products List");
     }
@@ -97,7 +96,7 @@ class ProductController extends Controller
 
     public function filterData()
     {
-        $query = Product::query();
+        $query = Product::query()->with("category");
 
         if (request()->category_id) {
             $query = $query
