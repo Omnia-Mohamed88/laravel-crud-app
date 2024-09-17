@@ -27,6 +27,9 @@ Route::get('categories', [CategoryController::class, 'index']);
 Route::get('categories/{category}', [CategoryController::class, 'show']);
 Route::get('products', [ProductController::class, 'index']);
 Route::get('products/{product}', [ProductController::class, 'show']);
+//api
+Route::post('password/verify-token', [AuthController::class, 'verifyResetToken']);
+
 
 Route::middleware('auth:api')->group(function () {
     Route::get("/profile",[UserController::class,'profile']);

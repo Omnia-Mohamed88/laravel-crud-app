@@ -108,5 +108,20 @@ class AuthController extends Controller
         return $this->respondSuccess("Password has been reset successfully");
 
     }
-
+    public function verifyResetToken(Request $request): JsonResponse
+    {
+        $request->validate([
+            'token' => 'required|string',
+        ]);
+    
+        $emailToken = EmailToken::where('token', $request->token)->first();
+    
+        if (!$emailToken) {
+            return $this->respondError("Invalid or expired token", 422);
+        }
+    
+        
+        return $this->respondSuccess("Token is valid", 200);
+    }
+    
 }
