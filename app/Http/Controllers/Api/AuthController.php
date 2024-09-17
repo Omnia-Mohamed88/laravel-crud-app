@@ -110,18 +110,16 @@ class AuthController extends Controller
     }
     public function verifyResetToken(Request $request): JsonResponse
     {
-        $request->validate([
-            'token' => 'required|string',
-        ]);
+        try {
+            $request->validate([
+                'token' => 'required|string|exists:emails_tokens,token',
+            ]);
     
-        $emailToken = EmailToken::where('token', $request->token)->first();
+            return $this->respondSuccess("Token is valid", 200);
     
-        if (!$emailToken) {
-            return $this->respondError("Invalid or expired token", 422);
-        }
-    
-        
-        return $this->respondSuccess("Token is valid", 200);
+        } catch (Exception $e) {
+            return $this->respondError($e->getMessage(), "invalid token");
     }
     
+}
 }
