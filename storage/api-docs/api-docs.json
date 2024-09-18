@@ -1,637 +1,17 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "My First API",
-        "version": "0.1"
+        "title": "Your super  ApplicationAPI",
+        "version": "1.0.0"
     },
     "paths": {
-        "/api/categories": {
-            "get": {
-                "tags": [
-                    "Category"
-                ],
-                "summary": "Get a list of categories",
-                "operationId": "ac9c4d978ea4e5b72915ca9728e5b8b1",
-                "parameters": [
-                    {
-                        "name": "page",
-                        "in": "query",
-                        "description": "Page number for pagination",
-                        "required": false,
-                        "schema": {
-                            "type": "integer",
-                            "example": 1
-                        }
-                    },
-                    {
-                        "name": "per_page",
-                        "in": "query",
-                        "description": "Number of items per page",
-                        "required": false,
-                        "schema": {
-                            "type": "integer",
-                            "example": 15
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "A paginated list of categories",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "current_page": {
-                                            "type": "integer",
-                                            "example": 1
-                                        },
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "properties": {
-                                                    "id": {
-                                                        "type": "integer",
-                                                        "example": 1
-                                                    },
-                                                    "title": {
-                                                        "type": "string",
-                                                        "example": "Technology"
-                                                    },
-                                                    "attachments": {
-                                                        "type": "array",
-                                                        "items": {
-                                                            "properties": {
-                                                                "file_path": {
-                                                                    "type": "string",
-                                                                    "example": "/path/to/file.jpg"
-                                                                }
-                                                            },
-                                                            "type": "object"
-                                                        }
-                                                    }
-                                                },
-                                                "type": "object"
-                                            }
-                                        },
-                                        "first_page_url": {
-                                            "type": "string",
-                                            "example": "http://example.com/api/categories?page=1"
-                                        },
-                                        "last_page_url": {
-                                            "type": "string",
-                                            "example": "http://example.com/api/categories?page=5"
-                                        },
-                                        "next_page_url": {
-                                            "type": "string",
-                                            "example": "http://example.com/api/categories?page=2"
-                                        },
-                                        "prev_page_url": {
-                                            "type": "string",
-                                            "example": "http://example.com/api/categories?page=1"
-                                        },
-                                        "total": {
-                                            "type": "integer",
-                                            "example": 100
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Server error"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
+        "/api/register": {
             "post": {
                 "tags": [
-                    "Category"
+                    "Auth"
                 ],
-                "summary": "Create a new category",
-                "operationId": "cca49a87d9b0ebb9a98ad7c154b71737",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "properties": {
-                                    "title": {
-                                        "type": "string",
-                                        "example": "New Category"
-                                    },
-                                    "attachments": {
-                                        "type": "array",
-                                        "items": {
-                                            "type": "string",
-                                            "format": "binary"
-                                        }
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": "Category created successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "id": {
-                                            "type": "integer",
-                                            "example": 1
-                                        },
-                                        "title": {
-                                            "type": "string",
-                                            "example": "New Category"
-                                        },
-                                        "attachments": {
-                                            "type": "array",
-                                            "items": {
-                                                "properties": {
-                                                    "file_path": {
-                                                        "type": "string",
-                                                        "example": "/path/to/file.jpg"
-                                                    }
-                                                },
-                                                "type": "object"
-                                            }
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Server error"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/api/categories/{id}": {
-            "get": {
-                "tags": [
-                    "Category"
-                ],
-                "summary": "Get a single category by ID",
-                "operationId": "09767bb2e47dde77dd1e2591428b0ae1",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Category details",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "id": {
-                                            "type": "integer",
-                                            "example": 1
-                                        },
-                                        "title": {
-                                            "type": "string",
-                                            "example": "Technology"
-                                        },
-                                        "attachments": {
-                                            "type": "array",
-                                            "items": {
-                                                "properties": {
-                                                    "file_path": {
-                                                        "type": "string",
-                                                        "example": "/path/to/file.jpg"
-                                                    }
-                                                },
-                                                "type": "object"
-                                            }
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Category not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Category not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "put": {
-                "tags": [
-                    "Category"
-                ],
-                "summary": "Update a category by ID",
-                "operationId": "7dcf71887e585de7f881e9eb98d86126",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "properties": {
-                                    "title": {
-                                        "type": "string",
-                                        "example": "Updated Category"
-                                    },
-                                    "attachments": {
-                                        "type": "array",
-                                        "items": {
-                                            "type": "string",
-                                            "format": "binary"
-                                        }
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Category updated successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "id": {
-                                            "type": "integer",
-                                            "example": 1
-                                        },
-                                        "title": {
-                                            "type": "string",
-                                            "example": "Updated Category"
-                                        },
-                                        "attachments": {
-                                            "type": "array",
-                                            "items": {
-                                                "properties": {
-                                                    "file_path": {
-                                                        "type": "string",
-                                                        "example": "/path/to/file.jpg"
-                                                    }
-                                                },
-                                                "type": "object"
-                                            }
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Category not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Category not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Server error"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "tags": [
-                    "Category"
-                ],
-                "summary": "Delete a category by ID",
-                "operationId": "9b61b65823f4a21f182506b34ddf805c",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Category deleted successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Category deleted successfully"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Category not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Category not found"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Server error"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/api/categories/import": {
-            "post": {
-                "tags": [
-                    "Category"
-                ],
-                "summary": "Import categories from a file",
-                "operationId": "5d1e90c33612f4739181d19d4364a101",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "properties": {
-                                    "file": {
-                                        "type": "string",
-                                        "format": "binary"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": "Categories imported successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Categories imported successfully"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "error": {
-                                            "type": "string",
-                                            "example": "Error importing file: some error message"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/api/users/{userId}/roles": {
-            "post": {
-                "tags": [
-                    "User"
-                ],
-                "summary": "Assign a role to a user",
-                "operationId": "93d2b0d5f199165ad38260385a2a2325",
-                "parameters": [
-                    {
-                        "name": "userId",
-                        "in": "path",
-                        "description": "The ID of the user to assign a role to",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "properties": {
-                                    "role": {
-                                        "type": "string",
-                                        "example": "admin"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Role assigned successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Role assigned successfully"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "error": {
-                                            "type": "string",
-                                            "example": "Unauthorized"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/api/users": {
-            "get": {
-                "tags": [
-                    "User"
-                ],
-                "summary": "Get a list of users",
-                "operationId": "566aed8efb436ca506e0ef51a032ecd9",
-                "responses": {
-                    "200": {
-                        "description": "A list of users",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "properties": {
-                                            "id": {
-                                                "type": "integer",
-                                                "example": 1
-                                            },
-                                            "name": {
-                                                "type": "string",
-                                                "example": "John Doe"
-                                            },
-                                            "email": {
-                                                "type": "string",
-                                                "example": "john.doe@example.com"
-                                            },
-                                            "role": {
-                                                "type": "string",
-                                                "example": "user"
-                                            }
-                                        },
-                                        "type": "object"
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Server error"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "post": {
-                "tags": [
-                    "User"
-                ],
-                "summary": "Create a new user",
-                "operationId": "be551c1d694a01c164966f58bfa77013",
+                "summary": "User registration",
+                "operationId": "8e4e3cb7b46126f4696379d3c7eeb4ad",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -640,19 +20,19 @@
                                 "properties": {
                                     "name": {
                                         "type": "string",
-                                        "example": "John Doe"
+                                        "example": "client"
                                     },
                                     "email": {
                                         "type": "string",
-                                        "example": "john.doe@example.com"
+                                        "example": "client@example.com"
                                     },
                                     "password": {
                                         "type": "string",
                                         "example": "password"
                                     },
-                                    "role": {
+                                    "password_confirmation": {
                                         "type": "string",
-                                        "example": "user"
+                                        "example": "password"
                                     }
                                 },
                                 "type": "object"
@@ -667,21 +47,48 @@
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "id": {
-                                            "type": "integer",
-                                            "example": 1
-                                        },
-                                        "name": {
+                                        "message": {
                                             "type": "string",
-                                            "example": "John Doe"
+                                            "example": "User Created Successfully"
                                         },
-                                        "email": {
-                                            "type": "string",
-                                            "example": "john.doe@example.com"
-                                        },
-                                        "role": {
-                                            "type": "string",
-                                            "example": "user"
+                                        "data": {
+                                            "properties": {
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "client"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "client@example.com"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2024-09-18T08:08:27.847000Z"
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2024-09-18T08:08:27.847000Z"
+                                                },
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 4
+                                                },
+                                                "role_id": {
+                                                    "type": "integer",
+                                                    "example": 3
+                                                },
+                                                "role_name": {
+                                                    "type": "string",
+                                                    "example": "user"
+                                                },
+                                                "token": {
+                                                    "type": "string",
+                                                    "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9..."
+                                                }
+                                            },
+                                            "type": "object"
                                         }
                                     },
                                     "type": "object"
@@ -690,14 +97,30 @@
                         }
                     },
                     "400": {
-                        "description": "Bad request",
+                        "description": "Invalid input",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "message": {
                                             "type": "string",
-                                            "example": "Validation error"
+                                            "example": "Invalid input"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Server error"
                                         }
                                     },
                                     "type": "object"
@@ -708,18 +131,515 @@
                 }
             }
         },
-        "/api/users/{id}": {
+        "/api/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "User login",
+                "operationId": "222b2625838e3c57e017987f73598fda",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "user@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "userpassword"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "token": {
+                                            "type": "string",
+                                            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid credentials",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Server error"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/logout": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "User logout",
+                "operationId": "ad65cbbd4e9f201619eae184a5961a98",
+                "responses": {
+                    "200": {
+                        "description": "Logout successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Logged out successfully."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Server error"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/new-password/email": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Send a password reset link",
+                "operationId": "9a4cc4cad389c67589f2ca83b2ccdef9",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "user@example.com"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Password reset link sent successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Mail sent successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Invalid input"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Server error"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/new-password/reset": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Reset password using a new token",
+                "operationId": "e562f01939d7607a7d838a09eb58ee8a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "token": {
+                                        "type": "string",
+                                        "example": "1234abcd5678efgh"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "newpassword"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "newpassword"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Password has been reset successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Password has been reset successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input or token",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Invalid input or token"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Server error"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/products": {
             "get": {
                 "tags": [
-                    "User"
+                    "Products"
                 ],
-                "summary": "Get a specific user",
-                "operationId": "6f51bd5fa2dddcd25e44cfa53dcbd10a",
+                "summary": "Get list of products",
+                "operationId": "d97d1c3727cbac49708b85f7d11f7d58",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Product"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Create a new product",
+                "operationId": "createProduct",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "example": "Sample Products testtt34"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "This is a sample product."
+                                    },
+                                    "price": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 99.99
+                                    },
+                                    "category_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "attachments": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "file_path": {
+                                                    "type": "string",
+                                                    "example": "http://localhost:8000/storage/attachments/20240913082706-skincarecategory.jpg"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Product created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Product created successfully."
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 4
+                                                },
+                                                "title": {
+                                                    "type": "string",
+                                                    "example": "Sample Products testtt34"
+                                                },
+                                                "description": {
+                                                    "type": "string",
+                                                    "example": "This is a sample product."
+                                                },
+                                                "price": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 99.99
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2024-09-13T20:39:52.948000Z"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2024-09-13T20:39:52.948000Z"
+                                                },
+                                                "attachments": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer",
+                                                                "example": 3
+                                                            },
+                                                            "file_path": {
+                                                                "type": "string",
+                                                                "example": "http://localhost:8000/storage/attachments/20240913082706-skincarecategory.jpg"
+                                                            },
+                                                            "created_at": {
+                                                                "type": "string",
+                                                                "format": "date-time",
+                                                                "example": "2024-09-13T20:39:52.967000Z"
+                                                            },
+                                                            "updated_at": {
+                                                                "type": "string",
+                                                                "format": "date-time",
+                                                                "example": "2024-09-13T20:39:52.967000Z"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "You must be logged in to access this resource."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden: You do not have the required permissions",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Forbidden"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "You do not have permission to create this product."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/products/{id}": {
+            "get": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Get a single product by ID",
+                "operationId": "getProductById",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "The ID of the user to retrieve",
+                        "description": "ID of the product to retrieve",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -728,42 +648,28 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "User details",
+                        "description": "Successful operation",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "id": {
-                                            "type": "integer",
-                                            "example": 1
-                                        },
-                                        "name": {
-                                            "type": "string",
-                                            "example": "John Doe"
-                                        },
-                                        "email": {
-                                            "type": "string",
-                                            "example": "john.doe@example.com"
-                                        },
-                                        "role": {
-                                            "type": "string",
-                                            "example": "user"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/Product"
                                 }
                             }
                         }
                     },
                     "404": {
-                        "description": "User not found",
+                        "description": "Product not found",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Not Found"
+                                        },
                                         "message": {
                                             "type": "string",
-                                            "example": "User not found"
+                                            "example": "Product not found."
                                         }
                                     },
                                     "type": "object"
@@ -775,15 +681,15 @@
             },
             "put": {
                 "tags": [
-                    "User"
+                    "Products"
                 ],
-                "summary": "Update a specific user",
-                "operationId": "070e37fc9aff78ae73860751bc990ed3",
+                "summary": "Update an existing product",
+                "operationId": "updateProduct",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "The ID of the user to update",
+                        "description": "ID of the product to update",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -796,17 +702,46 @@
                         "application/json": {
                             "schema": {
                                 "properties": {
-                                    "name": {
+                                    "title": {
                                         "type": "string",
-                                        "example": "John Doe Updated"
+                                        "example": "Updated Product Title"
                                     },
-                                    "email": {
+                                    "description": {
                                         "type": "string",
-                                        "example": "john.doe.updated@example.com"
+                                        "example": "Updated description for the product."
                                     },
-                                    "password": {
-                                        "type": "string",
-                                        "example": "newpassword"
+                                    "price": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 89.99
+                                    },
+                                    "category_id": {
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "attachments": {
+                                        "properties": {
+                                            "create": {
+                                                "type": "array",
+                                                "items": {
+                                                    "properties": {
+                                                        "file_path": {
+                                                            "type": "string",
+                                                            "example": "http://localhost:8000/storage/attachments/updated-product.jpg"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "delete": {
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "integer",
+                                                    "example": 3
+                                                }
+                                            }
+                                        },
+                                        "type": "object"
                                     }
                                 },
                                 "type": "object"
@@ -816,26 +751,37 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "User updated successfully",
+                        "description": "Product updated successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "id": {
-                                            "type": "integer",
-                                            "example": 1
-                                        },
-                                        "name": {
+                                        "message": {
                                             "type": "string",
-                                            "example": "John Doe Updated"
+                                            "example": "Product updated successfully."
                                         },
-                                        "email": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/Product"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request - Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
                                             "type": "string",
-                                            "example": "john.doe.updated@example.com"
+                                            "example": "Bad Request"
                                         },
-                                        "role": {
+                                        "message": {
                                             "type": "string",
-                                            "example": "user"
+                                            "example": "The request could not be processed due to validation errors."
                                         }
                                     },
                                     "type": "object"
@@ -844,14 +790,38 @@
                         }
                     },
                     "404": {
-                        "description": "User not found",
+                        "description": "Product not found",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Not Found"
+                                        },
                                         "message": {
                                             "type": "string",
-                                            "example": "User not found"
+                                            "example": "Product not found."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Internal Server Error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Failed to update the product."
                                         }
                                     },
                                     "type": "object"
@@ -859,19 +829,24 @@
                             }
                         }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             },
             "delete": {
                 "tags": [
-                    "User"
+                    "Products"
                 ],
-                "summary": "Delete a specific user",
-                "operationId": "0b4133ed462528a5e648b88ead11e929",
+                "summary": "Delete a product",
+                "operationId": "deleteProduct",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "The ID of the user to delete",
+                        "description": "ID of the product to delete",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -880,14 +855,14 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "User deleted successfully",
+                        "description": "Product deleted successfully",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
                                         "message": {
                                             "type": "string",
-                                            "example": "User deleted successfully"
+                                            "example": "Product deleted successfully."
                                         }
                                     },
                                     "type": "object"
@@ -896,14 +871,38 @@
                         }
                     },
                     "404": {
-                        "description": "User not found",
+                        "description": "Product not found",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Not Found"
+                                        },
                                         "message": {
                                             "type": "string",
-                                            "example": "User not found"
+                                            "example": "Product not found."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Internal Server Error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Failed to delete the product."
                                         }
                                     },
                                     "type": "object"
@@ -911,63 +910,89 @@
                             }
                         }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         }
     },
     "components": {
         "schemas": {
-            "Category": {
-                "title": "Category Resource",
-                "description": "A representation of a category",
-                "required": [
-                    "id",
-                    "title"
-                ],
+            "Product": {
+                "title": "Product",
+                "description": "Product model",
                 "properties": {
                     "id": {
-                        "description": "The unique identifier of the category",
-                        "type": "integer",
-                        "example": 1
+                        "description": "Product ID",
+                        "type": "integer"
                     },
                     "title": {
-                        "description": "The title of the category",
-                        "type": "string",
-                        "example": "Sample Category"
+                        "description": "Product title",
+                        "type": "string"
+                    },
+                    "description": {
+                        "description": "Product description",
+                        "type": "string"
+                    },
+                    "price": {
+                        "description": "Product price",
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "category_id": {
+                        "description": "Category ID",
+                        "type": "integer"
                     },
                     "attachments": {
                         "type": "array",
                         "items": {
                             "properties": {
+                                "id": {
+                                    "type": "integer",
+                                    "example": 3
+                                },
                                 "file_path": {
-                                    "description": "The path to the attachment file",
                                     "type": "string",
-                                    "example": "attachments/image.jpg"
+                                    "example": "http://localhost:8000/storage/attachments/sample.jpg"
+                                },
+                                "created_at": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "example": "2024-09-13T20:39:52.967000Z"
+                                },
+                                "updated_at": {
+                                    "type": "string",
+                                    "format": "date-time",
+                                    "example": "2024-09-13T20:39:52.967000Z"
                                 }
                             },
                             "type": "object"
                         }
-                    },
-                    "image": {
-                        "description": "The URL of the category's image",
-                        "type": "string",
-                        "format": "url",
-                        "example": "https://example.com/storage/image.jpg",
-                        "nullable": true
                     }
                 },
                 "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "description": "JWT Authorization header using the Bearer scheme.",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
             }
         }
     },
     "tags": [
         {
-            "name": "Category",
-            "description": "Category"
+            "name": "Auth",
+            "description": "Auth"
         },
         {
-            "name": "User",
-            "description": "User"
+            "name": "Products",
+            "description": "Products"
         }
     ]
 }
