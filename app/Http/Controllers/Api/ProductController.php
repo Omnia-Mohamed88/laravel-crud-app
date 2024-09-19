@@ -336,31 +336,27 @@ class ProductController extends Controller
     public function filterData()
     {
         $query = Product::query()->with("category");
-
-        if (request()->category_id) {
-            $query = $query
-                ->where("category_id", request()->category_id);
+    
+        if ($categoryId = request()->category_id) {
+            $query->where("category_id", $categoryId);
         }
-
-        if (request()->search) {
-            $query = $query->where(function ($q) {
-                $q->where("title", "like", "%" . request()->search . "%")
-                    ->orWhere("description", "like", "%" . request()->search . "%");
+    
+        if ($search = request()->search) {
+            $query->where(function ($q) use ($search) {
+                $q->where("title", "like", "%" . $search . "%")
+                  ->orWhere("description", "like", "%" . $search . "%");
             });
-
         }
-
-        if (request()->price) {
-            $query = $query
-                ->where("price", "<=", request()->price);
+    
+        if ($price = request()->price) {
+            $query->where("price", "<=", $price);
         }
-
-        if (request()->per_page) {
-            $query = $query->paginate(request()->per_page);
+    
+        if ($perPage = request()->per_page) {
+            return $query->paginate($perPage);
         } else {
-            $query = $query->get();
+            return $query->get();
         }
-
-        return $query;
     }
+    
 }

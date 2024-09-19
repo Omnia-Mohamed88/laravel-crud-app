@@ -128,26 +128,33 @@ class AuthController extends Controller
      * )
      */
     public function login(LoginRequest $request): JsonResponse
-{
-    
-    $user = User::where('email', $request->email)->first();
-    
-    if ($user && Hash::check($request->password, $user->password)) {
-        $token = $user->createToken('Personal Access Token')->accessToken;
-        $role = $user->roles()->first();
-        $user["role_id"] = $role->id;
-        $user["role_name"] = $role->name;
-        $user["token"] = $token;
-        
-        return $this->respond($user, 'Logged in Successfully!');
-    }
-    
-    return $this->respondError(
-        ['credentials' => 'Invalid email or password. Please check your credentials and try again.'],
-        "Login Failed!",
-        422
-    );
-}
+    {
+        try {
+            $user = User::where('email', $request->email)->first();
+
+            if ($user && Hash::check($request->password, $user->password)) {
+                $token = $user->createToken('Personal Access Token')->accessToken;
+                $role = $user->roles()->first();
+
+                $user["role_id"] = $role->id;
+                $user["role_name"] = $role->name;
+                $user["token"] = $token;
+
+                return $this->respond($user, 'Logged in Successfully!');
+            }
+
+            return $this->respondError(
+                ['credentials' => 'Invalid email or password. Please check your credentials and try again.'],
+                "Login Failed!",
+                422
+            );
+        } catch (Exception $e) {
+            return $this->respondError(
+                ['error' => 'An error occurred while trying to log in. Please try again later.'],
+                'Login Failed!',
+                500
+            );
+        }}
 /**
  * @OA\Post(
  *     path="/api/logout",

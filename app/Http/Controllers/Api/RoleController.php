@@ -41,6 +41,7 @@ class RoleController extends Controller
 
     public function destroy(Role $role) : JsonResponse
     {
+        $role->revokePermissionTo($role->permissions);
         $role->delete();
         return $this->respondSuccess("Role deleted successfully.");
     }

@@ -108,72 +108,6 @@
 					"response": []
 				},
 				{
-					"name": "Send Password Reset Link",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"email\": \"user@example.com\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{base_url}}/password/email",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"password",
-								"email"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Reset Password",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"email\": \"moni.salama88@gmail.com\",\n  \"password\": \"newpassword\",\n  \"password_confirmation\": \"newpassword\",\n  \"token\": \"9b780dd1f3c567bcd0ce172f5374c6757c5ebf408d50954d36cceadee0744f9b\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{base_url}}/password/reset",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"password",
-								"reset"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Send Password Reset Link Copy",
 					"request": {
 						"method": "POST",
@@ -476,12 +410,11 @@
 							]
 						},
 						"url": {
-							"raw": "{{baseUrl}}/api/categories/import",
+							"raw": "{{base_url}}/categories/import",
 							"host": [
-								"{{baseUrl}}"
+								"{{base_url}}"
 							],
 							"path": [
-								"api",
 								"categories",
 								"import"
 							]
@@ -546,13 +479,13 @@
 							}
 						],
 						"url": {
-							"raw": "{{base_url}}/products/8",
+							"raw": "{{base_url}}/products/1",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"products",
-								"8"
+								"1"
 							]
 						}
 					},
@@ -789,13 +722,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/users/10004",
+							"raw": "{{base_url}}/users/3",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"users",
-								"10004"
+								"3"
 							]
 						}
 					},
@@ -1241,13 +1174,13 @@
 							}
 						],
 						"url": {
-							"raw": "{{base_url}}/permissions/16",
+							"raw": "{{base_url}}/permissions/3",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"permissions",
-								"16"
+								"3"
 							]
 						}
 					},
