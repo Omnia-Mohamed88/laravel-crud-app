@@ -122,20 +122,22 @@ class CategoryController extends Controller
 
    }
 
+   
     public function import(Request $request): JsonResponse
-    {
-        $request->validate([
-            'file' => 'required|file|mimes:xlsx,csv|max:2048',
-        ]);
+{
+    $request->validate([
+        'file' => 'required|file|mimes:xlsx,csv|max:2048',
+    ]);
 
-        try {
-            Excel::import(new CategoriesImport, $request->file('file'));
+    try {
+        Excel::import(new CategoriesImport, $request->file('file'));
 
-            info('File imported successfully');
-            return response()->json(['message' => 'Categories imported successfully'], 201);
-        } catch (Exception $e) {
-            info('Error importing file: ' . $e->getMessage());
-            return response()->json(['error' => 'Error importing file: ' . $e->getMessage()], 500);
-        }
+        info('File imported successfully');
+        return $this->respondSuccess('Categories imported successfully.');
+    } catch (Exception $e) {
+        info('Error importing file: ' . $e->getMessage());
+        return $this->respondError($e->getMessage(), 'Failed to import categories.');
     }
+}
+
 }

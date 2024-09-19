@@ -12,6 +12,7 @@ class CategoryResource extends JsonResource
             'title' => $this->title,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            // 'active_label' => $this->active_label, 
             'attachments' => $this->attachments->map(function ($attachment) {
                 return [
                     'id' => $attachment->id,
