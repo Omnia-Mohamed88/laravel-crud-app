@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\CategoryController;
@@ -10,8 +11,7 @@ use App\Http\Controllers\Api\PermissionController;
 use App\Http\Controllers\Api\RolePermissionController;
 use App\Http\Controllers\Api\UploadController;
 
-Route::get("/aa",function(){
-    // dd(\App\Models\Category::inactive()->get());
+Route::get("/aa", function () {
     return response()->json(\App\Models\Category::all());
 });
 
@@ -27,15 +27,13 @@ Route::get('categories', [CategoryController::class, 'index']);
 Route::get('categories/{category}', [CategoryController::class, 'show']);
 Route::get('products', [ProductController::class, 'index']);
 Route::get('products/{product}', [ProductController::class, 'show']);
-//api
 Route::post('password/verify-token', [AuthController::class, 'verifyResetToken']);
 
-
 Route::middleware('auth:api')->group(function () {
-    Route::get("/profile",[UserController::class,'profile']);
+    Route::get("/profile", [UserController::class, 'profile']);
     Route::post('logout', [AuthController::class, 'logout']);
 
-    Route::middleware([ 'role:admin,superadmin'])->group(function () {
+    Route::middleware(['role:admin|superadmin'])->group(function () {
         Route::post('categories/import', [CategoryController::class, 'import']);
         Route::post('/attachments', [UploadController::class, 'saveOnDisk']);
         Route::post('/delete-image', [UploadController::class, 'deleteImage']);
@@ -44,7 +42,6 @@ Route::middleware('auth:api')->group(function () {
     });
 
     Route::middleware('role:superadmin')->group(function () {
-        Route::post('users/{user}/roles', [UserController::class, 'assignRoleToUser']);
         Route::apiResource('users', UserController::class);
         Route::apiResource('roles', RoleController::class);
         Route::post('roles/{role}/permissions', [RoleController::class, 'addPermission']);
