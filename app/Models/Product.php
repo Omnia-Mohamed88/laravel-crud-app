@@ -13,14 +13,14 @@ class Product extends Model
 
     protected $fillable = ['title', 'description', 'price', 'category_id'];
 
-    protected $appends = ["attachments_data"];
+    // protected $appends = ["attachments_data"];
 
-    protected function attachmentsData(): Attribute
-    {
-        return Attribute::make(
-            get: fn () => $this->attachments()?->get(),
-        );
-    }
+    // protected function attachmentsData(): Attribute
+    // {
+    //     return Attribute::make(
+    //         get: fn () => $this->attachments()?->get(),
+    //     );
+    // }
 
     /**
      * Get the category that owns the product.
