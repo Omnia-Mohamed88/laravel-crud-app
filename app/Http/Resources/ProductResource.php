@@ -27,14 +27,14 @@ class ProductResource extends JsonResource
         ];
     }
 
-    private function formatFilePath($filePath)
-    {
-        $filePath = ltrim($filePath, '/');
+    // private function formatFilePath($filePath)
+    // {
+    //     $filePath = ltrim($filePath, '/');
 
-        if (str_starts_with($filePath, 'storage/')) {
-            $filePath = substr($filePath, strlen('storage/'));
-        }
+    //     if (str_starts_with($filePath, 'storage/')) {
+    //         $filePath = substr($filePath, strlen('storage/'));
+    //     }
 
-        return asset('storage/' . $filePath);
-    }
+    //     return asset('storage/' . $filePath);
+    // }
 }

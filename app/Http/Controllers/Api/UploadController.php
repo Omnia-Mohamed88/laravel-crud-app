@@ -9,26 +9,56 @@ use Illuminate\Support\Facades\Storage;
 
 class UploadController extends Controller
 {
+    // public function saveOnDisk(Request $request): JsonResponse
+    // {
+    //     $request->validate([
+    //         'files.*' => 'required|image|max:2048',
+    //     ]);
+
+    //     $urls = [];
+
+    //     if ($request->hasFile('files')) {
+    //         $files = $request->file('files');
+    //         foreach ($files as $file) {
+    //             $path = $file->storeAs('public/attachments', date("Ymdhis") . '-' . $file->getClientOriginalName());
+    //             $urls[] = config('app.url') . Storage::url($path);
+    //         }
+    //         return $this->respond(["urls" => $urls, "count" => count($files)]);
+
+    //     }
+
+    //     return $this->respond(["urls" => $urls],'No files uploaded');
+    // }
+
     public function saveOnDisk(Request $request): JsonResponse
-    {
-        $request->validate([
-            'files.*' => 'required|image|max:2048',
-        ]);
+{
+    $request->validate([
+        'files.*' => 'required|image|max:2048',
+    ]);
 
-        $urls = [];
+    $folder = $request->input('folder', ''); 
+    
+    $fullFolderPath = 'attachments' . ($folder ? "/$folder" : '');
 
-        if ($request->hasFile('files')) {
-            $files = $request->file('files');
-            foreach ($files as $file) {
-                $path = $file->storeAs('public/attachments', date("Ymdhis") . '-' . $file->getClientOriginalName());
-                $urls[] = config('app.url') . Storage::url($path);
-            }
-            return $this->respond(["urls" => $urls, "count" => count($files)]);
+    $urls = [];
 
+    if ($request->hasFile('files')) {
+        $files = $request->file('files');
+        foreach ($files as $file) {
+            $path = $file->storeAs("public/$fullFolderPath", date("Ymdhis") . '-' . $file->getClientOriginalName());
+            $urls[] = config('app.url') . Storage::url($path);
         }
 
-        return $this->respond(["urls" => $urls],'No files uploaded');
+        return $this->respond(["urls" => $urls, "count" => count($files)]);
     }
+
+    return $this->respond(["urls" => $urls], 'No files uploaded');
+}
+
+
+
+
+
 
     public function deleteImage(Request $request): JsonResponse
     {
